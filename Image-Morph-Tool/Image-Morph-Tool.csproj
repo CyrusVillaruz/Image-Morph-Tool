@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="MIConvexHull" Version="1.1.19.1019" />
   </ItemGroup>
 
   <ItemGroup>
