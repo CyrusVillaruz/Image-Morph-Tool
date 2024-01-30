@@ -55,7 +55,7 @@
                               Minimum="2"
                               ParsingNumberStyle="Integer"
                               DefaultValue="80" Text="80"
-                              VerticalAlignment="Top" Grid.Column="1" ValueChanged="NumberOfFrames_ValueChanged" Height="20"/>
+                              VerticalAlignment="Top" Grid.Column="1" ValueChanged="NumberOfFrames_ValueChanged" Height="20" />
                 <Label Content="Number of Frames&#xD;&#xA;" VerticalAlignment="Top" Height="26"/>
                 <Button Name="AutoAnimationStartButton" Content="Play" VerticalAlignment="Top" Click="PlayButton_Click" Margin="10,81,10,0" Height="20" Grid.ColumnSpan="2"/>
                 <CheckBox Name="Reverse" Content="Reverse" VerticalAlignment="Top" Height="20" Margin="10,56,10,0"/>
