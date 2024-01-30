@@ -74,10 +74,5 @@ namespace Image_Morph_Tool
         {
             throw new NotImplementedException();
         }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
