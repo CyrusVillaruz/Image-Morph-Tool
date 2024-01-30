@@ -6,6 +6,16 @@
     <RootNamespace>Image_Morph_Tool</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CrossDissolve\" />
+    <Folder Include="Warp\" />
+  </ItemGroup>
 
 </Project>
