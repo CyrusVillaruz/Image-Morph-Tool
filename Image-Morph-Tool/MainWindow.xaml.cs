@@ -108,7 +108,7 @@ namespace Image_Morph_Tool
 
         private void NumThreadsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            
         }
 
         private void OnClearMarker_Click(object sender, RoutedEventArgs e)
