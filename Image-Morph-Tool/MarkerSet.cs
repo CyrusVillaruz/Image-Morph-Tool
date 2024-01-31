@@ -93,7 +93,7 @@ namespace Image_Morph_Tool
             int markerIdx = 0;
             foreach (Vector point in pointsPerCanvas)
             {
-                var markerRect = new Rectangle();
+                var markerRect = new Ellipse();
                 markerRect.Width = MARKER_RENDER_SIZE;
                 markerRect.Height = MARKER_RENDER_SIZE;
                 markerRect.StrokeThickness = 2;
@@ -114,8 +114,8 @@ namespace Image_Morph_Tool
                     markerRect.Fill = new SolidColorBrush(Colors.White);
                 }
 
-                markerRect.RadiusX = MARKER_RENDER_SIZE / 4;
-                markerRect.RadiusY = MARKER_RENDER_SIZE / 4;
+                markerRect.Width = MARKER_RENDER_SIZE;
+                markerRect.Height = MARKER_RENDER_SIZE;
 
                 Canvas.SetLeft(markerRect, point.X * imageSizePixel.X + imageOffsetPixel.X - MARKER_RENDER_SIZE / 2);
                 Canvas.SetTop(markerRect, point.Y * imageSizePixel.Y + imageOffsetPixel.Y - MARKER_RENDER_SIZE / 2);
