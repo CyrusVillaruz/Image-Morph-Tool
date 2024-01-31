@@ -124,12 +124,16 @@ namespace Image_Morph_Tool
             {
                 var marker = ((LineMarker)_markerList[_draggedEndPoint])[clickLocation];
                 if ((marker.Start - imageCor).Length > MIN_LINE_LENGTH)
+                {
                     marker.End = imageCor;
+                }
                 if (_dragBoth)
                 {
                     marker = ((LineMarker)_markerList[_draggedEndPoint])[clickLocation == Location.START_IMAGE ? Location.END_IMAGE : Location.START_IMAGE];
                     if ((marker.Start - imageCor).Length > MIN_LINE_LENGTH)
+                    {
                         marker.End = imageCor;
+                    }
                 }
                 _markerList[_draggedEndPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
                 return true;
