@@ -160,13 +160,10 @@ namespace Image_Morph_Tool
                 Canvas.SetLeft(arrow, imageOffsetPixel.X);
                 Canvas.SetTop(arrow, imageOffsetPixel.Y);
                 imageCanvas.Children.Add(arrow);
-
-                if ((_hoveredStartPoint == markerIdx || _hoveredEndPoint == markerIdx) && !_dragBoth)
-                {
-                    AddPointsToCanvases(new List<Vector> { marker[location].Start, marker[location].End },
-                                        -1, -1, imageCanvas, imageOffsetPixel, imageSizePixel);
-                }
             }
+
+            AddPointsToCanvases(Lines.Select(x => x[location].Start), _dragedStartPoint, _hoveredStartPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
+            AddPointsToCanvases(Lines.Select(x => x[location].End), _dragedEndPoint, _hoveredEndPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
         }
     }
 }
