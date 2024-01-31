@@ -10,13 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
-    <PackageReference Include="MIConvexHull" Version="1.1.19.1019" />
+    <Compile Remove="CrossDissolve\**" />
+    <Compile Remove="Warp\**" />
+    <EmbeddedResource Remove="CrossDissolve\**" />
+    <EmbeddedResource Remove="Warp\**" />
+    <None Remove="CrossDissolve\**" />
+    <None Remove="Warp\**" />
+    <Page Remove="CrossDissolve\**" />
+    <Page Remove="Warp\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CrossDissolve\" />
-    <Folder Include="Warp\" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="MIConvexHull" Version="1.1.19.1019" />
   </ItemGroup>
 
 </Project>

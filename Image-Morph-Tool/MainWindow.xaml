@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Image_Morph_Tool" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="600" Width="1024">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="booleanToVisibility" />
     </Window.Resources>
@@ -19,7 +19,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Grid Margin="0,10,10,39" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="#FFEAEAEA" Grid.Column="1">
+        <Grid Margin="0,10,10,39" ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -28,20 +28,20 @@
                 <RowDefinition/>
                 <RowDefinition FrameworkElement.FlowDirection="RightToLeft"/>
             </Grid.RowDefinitions>
-            <Image Name="StartImage" Cursor="Pen" MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseRightButtonDown="Image_MouseRightButtonDown" 
+            <Image Name="SourceImage" Cursor="Pen" MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseRightButtonDown="Image_MouseRightButtonDown" 
                                     MouseLeftButtonUp="Image_MarkerDeselect" MouseLeave="Image_MarkerDeselect" MouseMove="Image_MouseMove" Margin="0,0,0,5" UseLayoutRounding="False"/>
             <Canvas Name="StartImageMarkerCanvas" IsHitTestVisible="False" Margin="0,0,0,5"/>
-            <Image Name="EndImage" Grid.Column="1" Cursor="Pen" MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseRightButtonDown="Image_MouseRightButtonDown"
+            <Image Name="DestinationImage" Grid.Column="1" Cursor="Pen" MouseLeftButtonDown="Image_MouseLeftButtonDown" MouseRightButtonDown="Image_MouseRightButtonDown"
                                     MouseLeftButtonUp="Image_MarkerDeselect" MouseLeave="Image_MarkerDeselect" MouseMove="Image_MouseMove" Margin="0,0,0,5"/>
             <Canvas Name="EndImageMarkerCanvas" Grid.Column="1" IsHitTestVisible="False" Margin="0,0,0,5"/>
             <Image Grid.Row="1" Name="OutputImage" Grid.ColumnSpan="2" Margin="0,5,0,0"/>
             <Canvas Name="OutputImageMarkerCanvas" Grid.Row="1" Grid.ColumnSpan="2" IsHitTestVisible="False" Margin="0,5,0,0" Visibility="Hidden"/>
         </Grid>
-        <Button Name="LoadStartImageButton" Content="Select Source Image" Margin="10,10,10,0" VerticalAlignment="Top" Height="28" Click="OnClick_LoadStartImage"/>
-        <Button Name="LoadEndImageButton" Content="Select Destination Image" Margin="10,43,10,0" VerticalAlignment="Top" Height="28" Click="OnClick_LoadEndImage"/>
-        <Slider Margin="10,554,10,0" Height="24" VerticalAlignment="Top" Grid.Column="1" ValueChanged="OnProgressChange" Name="ProgressBar" Minimum="1" Maximum="{Binding Value, ElementName=NumFrames, ValidatesOnExceptions=True}"  TickFrequency="1" SmallChange="1" IsSnapToTickEnabled="True"/>
+        <Button Name="LoadStartImageButton" Content="Select Source Image" Margin="10,10,10,0" VerticalAlignment="Top" Height="28" Click="LoadSourceImage_Click"/>
+        <Button Name="LoadEndImageButton" Content="Select Destination Image" Margin="10,43,10,0" VerticalAlignment="Top" Height="28" Click="LoadDestinationImage_Click"/>
+        <Slider Margin="10,0,10,0" Height="24" VerticalAlignment="Bottom" Grid.Column="1" ValueChanged="OnProgressChange" Name="ProgressBar" Minimum="1" Maximum="{Binding Value, ElementName=NumFrames, ValidatesOnExceptions=True}"  TickFrequency="1" SmallChange="1" IsSnapToTickEnabled="True"/>
 
-        <GroupBox Header="Animation" Margin="10,76,10,0" Height="143" VerticalAlignment="Top">
+        <GroupBox Header="Animation" Margin="10,76,10,0" Height="163" VerticalAlignment="Top">
             <Grid Margin="5" RenderTransformOrigin="0.589,0.482">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="43*"/>
@@ -57,8 +57,8 @@
                               DefaultValue="80" Text="80"
                               VerticalAlignment="Top" Grid.Column="1" ValueChanged="NumberOfFrames_ValueChanged" Height="20" />
                 <Label Content="Number of Frames&#xD;&#xA;" VerticalAlignment="Top" Height="26"/>
-                <Button Name="AutoAnimationStartButton" Content="Play" VerticalAlignment="Top" Click="PlayButton_Click" Margin="10,81,10,0" Height="20" Grid.ColumnSpan="2"/>
-                <CheckBox Name="Reverse" Content="Reverse" VerticalAlignment="Top" Height="20" Margin="10,56,10,0"/>
+                <Button x:Name="PlayAnimationButton" Content="Play" VerticalAlignment="Top" Click="PlayButton_Click" Margin="10,106,10,0" Height="20" Grid.ColumnSpan="2"/>
+                <CheckBox Name="Reverse" Content="Reverse" VerticalAlignment="Top" Height="20" Margin="10,81,10,0"/>
                 <xctk:DoubleUpDown x:Name="Duration"
                	            Margin="0,32,0,0"
                	            ShowButtonSpinner="True"
@@ -68,9 +68,16 @@
                	            ParsingNumberStyle="Number"
                	            Value="2" VerticalAlignment="Top" ValueChanged="NumberOfFrames_ValueChanged" Grid.Column="1" FormatString="F2" RenderTransformOrigin="0.49,-1" Height="20"/>
                 <Label Content="Morph Duration (s):" VerticalAlignment="Top" Margin="0,25,0,0" Height="26"/>
+                <CheckBox Content="Show Control Line" 
+                          HorizontalAlignment="Left" 
+                          Margin="10,56,0,0" 
+                          VerticalAlignment="Top" 
+                          Width="188" Height="20" 
+                          Grid.ColumnSpan="2"
+                          Click="ShowOutputMarker_Checked"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Benchmarking" Margin="10,224,10,0" Height="218" VerticalAlignment="Top">
+        <GroupBox Header="Benchmarking" Margin="10,244,10,0" Height="218" VerticalAlignment="Top">
             <Grid Margin="0,0,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
