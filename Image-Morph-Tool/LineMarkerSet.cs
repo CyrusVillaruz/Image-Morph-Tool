@@ -34,8 +34,8 @@ namespace Image_Morph_Tool
         public IEnumerable<LineMarker> Lines
         { get { return _markerList.Cast<LineMarker>(); } }
 
-        private int _dragedEndPoint = -1;
-        private int _dragedStartPoint = -1;
+        private int _draggedEndPoint = -1;
+        private int _draggedStartPoint = -1;
         private int _hoveredStartPoint = -1;
         private int _hoveredEndPoint = -1;
         private bool _dragBoth = false;
@@ -46,13 +46,13 @@ namespace Image_Morph_Tool
         {
             if (_hoveredStartPoint >= 0 || _hoveredEndPoint >= 0)
             {
-                _dragedEndPoint = _hoveredEndPoint;
-                _dragedStartPoint = _hoveredStartPoint;
+                _draggedEndPoint = _hoveredEndPoint;
+                _draggedStartPoint = _hoveredStartPoint;
                 return;
             }
 
             _dragBoth = true;
-            _dragedEndPoint = _markerList.Count;
+            _draggedEndPoint = _markerList.Count;
             LineMarker newLine = new LineMarker()
             {
                 StartMarker = new Line() { Start = imageCor, End = imageCor + new Vector(MIN_LINE_LENGTH, 0.0) },
@@ -64,71 +64,88 @@ namespace Image_Morph_Tool
 
         public override void OnLeftMouseButtonUp()
         {
-            _dragedStartPoint = -1;
-            _dragedEndPoint = -1;
+            _draggedStartPoint = -1;
+            _draggedEndPoint = -1;
             _dragBoth = false;
         }
 
         public override void OnRightMouseButtonDown(Location clickLocation, Vector imageCor, Vector imageSizePixel)
         {
-            if (_dragedStartPoint >= 0)
-                _markerList.RemoveAt(_dragedStartPoint);
-            else if (_dragedEndPoint >= 0)
-                _markerList.RemoveAt(_dragedEndPoint);
+            if (_draggedStartPoint >= 0)
+            {
+                _markerList.RemoveAt(_draggedStartPoint);
+            }
+            else if (_draggedEndPoint >= 0)
+            {
+                _markerList.RemoveAt(_draggedEndPoint);
+            }
             else
             {
                 int hit = PointHitTest(Lines.Select(x => x[clickLocation].End), imageCor, imageSizePixel);
-                if (hit >= 0) _markerList.RemoveAt(hit);
+                if (hit >= 0)
+                {
+                    _markerList.RemoveAt(hit);
+                }
                 else
                 {
                     hit = PointHitTest(Lines.Select(x => x[clickLocation].Start), imageCor, imageSizePixel);
-                    if (hit >= 0) _markerList.RemoveAt(hit);
+                    if (hit >= 0)
+                    {
+                        _markerList.RemoveAt(hit);
+                    }
                 }
             }
 
-            _dragedStartPoint = -1;
-            _dragedEndPoint = -1;
+            _draggedStartPoint = -1;
+            _draggedEndPoint = -1;
         }
 
         public override bool OnMouseMove(Location clickLocation, Vector imageCor, Vector imageSizePixel)
         {
-            if (_dragedStartPoint >= 0)
+            if (_draggedStartPoint >= 0)
             {
-                var marker = ((LineMarker)_markerList[_dragedStartPoint])[clickLocation];
+                var marker = ((LineMarker)_markerList[_draggedStartPoint])[clickLocation];
                 if ((marker.End - imageCor).Length > MIN_LINE_LENGTH)
                 {
                     marker.Start = imageCor;
                 }
                 if (_dragBoth)
                 {
-                    marker = ((LineMarker)_markerList[_dragedStartPoint])[clickLocation == Location.START_IMAGE ? Location.END_IMAGE : Location.START_IMAGE];
+                    marker = ((LineMarker)_markerList[_draggedStartPoint])[clickLocation == Location.START_IMAGE ? Location.END_IMAGE : Location.START_IMAGE];
                     if ((marker.End - imageCor).Length > MIN_LINE_LENGTH)
+                    {
                         marker.Start = imageCor;
+                    }
                 }
-                _markerList[_dragedStartPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
+                _markerList[_draggedStartPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
                 return true;
             }
-            else if (_dragedEndPoint >= 0)
+            else if (_draggedEndPoint >= 0)
             {
-                var marker = ((LineMarker)_markerList[_dragedEndPoint])[clickLocation];
+                var marker = ((LineMarker)_markerList[_draggedEndPoint])[clickLocation];
                 if ((marker.Start - imageCor).Length > MIN_LINE_LENGTH)
                     marker.End = imageCor;
                 if (_dragBoth)
                 {
-                    marker = ((LineMarker)_markerList[_dragedEndPoint])[clickLocation == Location.START_IMAGE ? Location.END_IMAGE : Location.START_IMAGE];
+                    marker = ((LineMarker)_markerList[_draggedEndPoint])[clickLocation == Location.START_IMAGE ? Location.END_IMAGE : Location.START_IMAGE];
                     if ((marker.Start - imageCor).Length > MIN_LINE_LENGTH)
                         marker.End = imageCor;
                 }
-                _markerList[_dragedEndPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
+                _markerList[_draggedEndPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
                 return true;
             }
             else
             {
                 _hoveredEndPoint = PointHitTest(Lines.Select(x => x[clickLocation].End), imageCor, imageSizePixel); ;
                 if (_hoveredEndPoint < 0)
+                {
                     _hoveredStartPoint = PointHitTest(Lines.Select(x => x[clickLocation].Start), imageCor, imageSizePixel);
+                }
                 else
+                {
                     _hoveredStartPoint = -1;
+                }
+
                 return false;
             }
         }
@@ -145,12 +162,20 @@ namespace Image_Morph_Tool
                 arrow.HeadHeight = MarkerSet.MARKER_RENDER_SIZE / 2;
                 arrow.HeadWidth = MarkerSet.MARKER_RENDER_SIZE;
                 arrow.Stretch = Stretch.None;
-                if (markerIdx == _dragedEndPoint || markerIdx == _dragedStartPoint)
+
+                if (markerIdx == _draggedEndPoint || markerIdx == _draggedStartPoint)
+                {
                     arrow.Stroke = new SolidColorBrush(Colors.Red);
+                }
                 else if (markerIdx == _hoveredStartPoint || markerIdx == _hoveredEndPoint)
+                {
                     arrow.Stroke = new SolidColorBrush(Colors.DarkRed);
+                }
                 else
+                {
                     arrow.Stroke = new SolidColorBrush(Colors.Black);
+                }
+
                 arrow.StrokeThickness = 2;
                 arrow.X1 = marker[location].Start.X * imageSizePixel.X;
                 arrow.X2 = marker[location].End.X * imageSizePixel.X;
@@ -162,8 +187,8 @@ namespace Image_Morph_Tool
                 imageCanvas.Children.Add(arrow);
             }
 
-            AddPointsToCanvases(Lines.Select(x => x[location].Start), _dragedStartPoint, _hoveredStartPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
-            AddPointsToCanvases(Lines.Select(x => x[location].End), _dragedEndPoint, _hoveredEndPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
+            AddPointsToCanvases(Lines.Select(x => x[location].Start), _draggedStartPoint, _hoveredStartPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
+            AddPointsToCanvases(Lines.Select(x => x[location].End), _draggedEndPoint, _hoveredEndPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
         }
     }
 }
