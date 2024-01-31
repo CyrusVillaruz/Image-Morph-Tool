@@ -103,6 +103,9 @@ namespace Image_Morph_Tool
 
         private void OnProgressChange(object senender, RoutedPropertyChangedEventArgs<double> e)
         {
+            int frame = (int)e.NewValue;
+            CurrentFrameTextBox.Text = frame.ToString();
+
             UpdateOutputImageContent();
         }
 
