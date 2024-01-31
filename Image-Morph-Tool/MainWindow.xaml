@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Image_Morph_Tool" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1024">
+        Title="MainWindow" Height="600" Width="1024" Background="#2C2C2C" Foreground="White">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="booleanToVisibility" />
     </Window.Resources>
@@ -38,65 +38,218 @@
             <Image Grid.Row="1" Name="OutputImage" Grid.ColumnSpan="2" Margin="0,5,0,0"/>
             <Canvas Name="OutputImageMarkerCanvas" Grid.Row="1" Grid.ColumnSpan="2" IsHitTestVisible="False" Margin="0,5,0,0" Visibility="Hidden"/>
         </Grid>
-        <Button Name="LoadStartImageButton" Content="Select Source Image" Margin="10,10,10,0" VerticalAlignment="Top" Height="28" Click="LoadSourceImage_Click"/>
-        <Button Name="LoadEndImageButton" Content="Select Destination Image" Margin="10,43,10,0" VerticalAlignment="Top" Height="28" Click="LoadDestinationImage_Click"/>
+        <Button Name="LoadStartImageButton" Content="Select Source Image" Margin="10,10,10,0" 
+                VerticalAlignment="Top" Height="28" Click="LoadSourceImage_Click" 
+                Background="#333333" Foreground="White" BorderThickness="0">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+        <Button Name="LoadEndImageButton" Content="Select Destination Image" Margin="10,43,10,0" 
+                VerticalAlignment="Top" Height="28" Click="LoadDestinationImage_Click" 
+                Background="#333333" Foreground="White" BorderThickness="0">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
-            <TextBlock Text="Current Frame: " FontSize="14" VerticalAlignment="Center"/>
-            <TextBox x:Name="CurrentFrameTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" FontSize="14" Text="{Binding ElementName=ProgressBar, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="Current Frame: " FontSize="14" VerticalAlignment="Center" Foreground="White"/>
+            <TextBox x:Name="CurrentFrameTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" FontSize="14" 
+                     Text="{Binding ElementName=ProgressBar, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Background="#2C2C2C" Foreground="White"
+                     BorderThickness="0" TextAlignment="Center"/>
         </StackPanel>
 
-        <Slider Grid.Row="1" Margin="10,0,10,0" Height="24" VerticalAlignment="Bottom" Grid.Column="1" ValueChanged="OnProgressChange" Name="ProgressBar" Minimum="1" Maximum="{Binding Value, ElementName=NumFrames, ValidatesOnExceptions=True}" TickFrequency="1" SmallChange="1" IsSnapToTickEnabled="True"/>
-
-        <GroupBox Header="Animation" Margin="10,76,10,0" Height="163" VerticalAlignment="Top">
+        <Slider Grid.Row="1" Margin="10,0,10,0" Height="24" VerticalAlignment="Bottom" Grid.Column="1" ValueChanged="OnProgressChange" Name="ProgressBar" Minimum="1" Maximum="{Binding Value, ElementName=NumFrames, ValidatesOnExceptions=True}" TickFrequency="1" SmallChange="1" IsSnapToTickEnabled="True" Background="#2C2C2C" Foreground="White"/>
+        <GroupBox Header="Animation" Margin="10,76,10,0" Height="163" VerticalAlignment="Top" 
+                  Background="#2C2C2C" Foreground="White"
+                  BorderThickness="0">
             <Grid Margin="5" RenderTransformOrigin="0.589,0.482">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="43*"/>
-                    <ColumnDefinition Width="36*"/>
+                    <ColumnDefinition Width="63*"/>
+                    <ColumnDefinition Width="41*"/>
                 </Grid.ColumnDefinitions>
                 <xctk:DoubleUpDown x:Name="NumFrames"
-                              Margin="0,1,0,0"
+                              Margin="10,4,10,0"
                               ShowButtonSpinner="True"
                               Increment="1"
                               Maximum="1000"
                               Minimum="2"
                               ParsingNumberStyle="Integer"
                               DefaultValue="10" Text="10"
-                              VerticalAlignment="Top" Grid.Column="1" ValueChanged="NumberOfFrames_ValueChanged" Height="20" />
-                <Label Content="Number of Frames&#xD;&#xA;" VerticalAlignment="Top" Height="26"/>
-                <Button x:Name="PlayAnimationButton" Content="Play" VerticalAlignment="Top" Click="PlayButton_Click" Margin="10,106,10,0" Height="20" Grid.ColumnSpan="2"/>
-                <CheckBox Name="Reverse" Content="Reverse" VerticalAlignment="Top" Height="20" Margin="10,81,10,0"/>
+                              VerticalAlignment="Top" Grid.Column="1" 
+                              ValueChanged="NumberOfFrames_ValueChanged" 
+                              Height="20"
+                              Background="#333333" Foreground="White"
+                              BorderThickness="0"/>
+                <Label Content="Number of Frames&#xD;&#xA;" VerticalAlignment="Top" Height="26" Margin="5,1,0,0" Foreground="White"/>
+                <Button x:Name="PlayAnimationButton" Content="Play" VerticalAlignment="Top" 
+                        Click="PlayButton_Click" Margin="10,106,10,0" Height="20" 
+                        Grid.ColumnSpan="2" Background="#333333" Foreground="White"
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <CheckBox Name="Reverse" 
+                          Content="Reverse" 
+                          HorizontalAlignment="Left" 
+                          VerticalAlignment="Top" 
+                          Width="188" Height="20" 
+                          Grid.ColumnSpan="2"
+                          Margin="10,80,0,0" 
+                          Foreground="White">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Background" Value="#333333"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" Background="#2C2C2C" IsHitTestVisible="False">
+                                                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0">
+                <ContentPresenter/>
+                                                </TextBlock>
+                                            </Border>
+                                            <Border x:Name="CheckBorder" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="2" Cursor="Hand">
+                                                <Path x:Name="CheckMark"
+                                  Stroke="White"
+                                  StrokeThickness="2"
+                                  Data="M0,5 L5,10 L20,0"
+                                  SnapsToDevicePixels="True"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Opacity="0"/>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
                 <xctk:DoubleUpDown x:Name="Duration"
-               	            Margin="0,32,0,0"
+               	            Margin="10,28,10,0"
                	            ShowButtonSpinner="True"
                	            Increment="0.25"
                	            Maximum="1000"
                	            Minimum="0.25"
                	            ParsingNumberStyle="Number"
-               	            Value="2" VerticalAlignment="Top" ValueChanged="NumberOfFrames_ValueChanged" Grid.Column="1" FormatString="F2" RenderTransformOrigin="0.49,-1" Height="20"/>
-                <Label Content="Morph Duration (s):" VerticalAlignment="Top" Margin="0,25,0,0" Height="26"/>
+               	            Value="2" VerticalAlignment="Top" ValueChanged="NumberOfFrames_ValueChanged" 
+                            Grid.Column="1" FormatString="F2" RenderTransformOrigin="0.49,-1" Height="20"
+                            Background="#333333" Foreground="White"
+                            BorderThickness="0"/>
+                <Label Content="Morph Duration (s):" VerticalAlignment="Top" Margin="5,25,0,0" Height="26" Foreground="White"/>
                 <CheckBox Content="Show Control Line" 
                           HorizontalAlignment="Left" 
-                          Margin="10,56,0,0" 
-                          VerticalAlignment="Top" 
+                          Margin="10,0,0,0" 
+                          VerticalAlignment="Center" 
                           Width="188" Height="20" 
                           Grid.ColumnSpan="2"
-                          Click="ShowOutputMarker_Checked"/>
+                          Click="ShowOutputMarker_Checked"
+                          Foreground="White">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Background" Value="#333333"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" Background="#2C2C2C" IsHitTestVisible="False">
+                                                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0">
+                                    <ContentPresenter/>
+                                                </TextBlock>
+                                            </Border>
+                                            <Border x:Name="CheckBorder" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="2" Cursor="Hand">
+                                                <Path x:Name="CheckMark"
+                                                      Stroke="White"
+                                                      StrokeThickness="2"
+                                                      Data="M0,5 L5,10 L20,0"
+                                                      SnapsToDevicePixels="True"
+                                                      HorizontalAlignment="Right"
+                                                      VerticalAlignment="Center"
+                                                      Opacity="0"/>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
+
             </Grid>
         </GroupBox>
-        <GroupBox Header="Benchmarking" Margin="10,244,10,0" Height="218" VerticalAlignment="Top">
+        <GroupBox Header="Benchmarking" 
+                  Margin="10,244,10,0" 
+                  Height="218" 
+                  VerticalAlignment="Top" 
+                  Background="#2C2C2C" Foreground="White"
+                  BorderThickness="0">
             <Grid Margin="0,0,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="93*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="No Benchmark in Progress..." Margin="4,85,10,10" Grid.ColumnSpan="2" Grid.Column="1" IsEnabled="False"/>
-                <Button Name="Benchmark" Margin="4,37,10,115" Grid.ColumnSpan="2" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <TextBox Text="No Benchmark in Progress..." 
+                         Margin="4,85,10,10" 
+                         Grid.ColumnSpan="2" 
+                         Grid.Column="1" 
+                         IsEnabled="False" 
+                         Background="#2C2C2C" 
+                         Foreground="White"
+                         BorderThickness="0"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+                <Button Name="Benchmark" Margin="4,37,10,115"
+                        Grid.ColumnSpan="2" Grid.Column="1" 
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Background="#333333" Foreground="White"
+                        BorderThickness="0">
                     <Button.Content>
                         <TextBlock Text="Retrieve Morph Benchmark Results" TextWrapping="Wrap"/>
                     </Button.Content>
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
                 </Button>
-                <ComboBox x:Name="NumThreadsSelector" VerticalAlignment="Top" SelectedIndex="0" Height="22" SelectionChanged="NumThreadsSelector_SelectionChanged" Margin="4,10,10,0" Grid.ColumnSpan="2" Grid.Column="1">
+                <ComboBox x:Name="NumThreadsSelector"
+                          VerticalAlignment="Top"
+                          SelectedIndex="0"
+                          Height="22"
+                          SelectionChanged="NumThreadsSelector_SelectionChanged"
+                          Margin="4,10,10,0" Grid.ColumnSpan="2" Grid.Column="1">
                     <ComboBoxItem Content="1 Thread"/>
                     <ComboBoxItem Content="2 Threads"/>
                     <ComboBoxItem Content="3 Threads"/>
