@@ -12,6 +12,7 @@
     <Grid Margin="0,0,0,-4">
         <Grid.RowDefinitions>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250
@@ -39,7 +40,12 @@
         </Grid>
         <Button Name="LoadStartImageButton" Content="Select Source Image" Margin="10,10,10,0" VerticalAlignment="Top" Height="28" Click="LoadSourceImage_Click"/>
         <Button Name="LoadEndImageButton" Content="Select Destination Image" Margin="10,43,10,0" VerticalAlignment="Top" Height="28" Click="LoadDestinationImage_Click"/>
-        <Slider Margin="10,0,10,0" Height="24" VerticalAlignment="Bottom" Grid.Column="1" ValueChanged="OnProgressChange" Name="ProgressBar" Minimum="1" Maximum="{Binding Value, ElementName=NumFrames, ValidatesOnExceptions=True}"  TickFrequency="1" SmallChange="1" IsSnapToTickEnabled="True"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
+            <TextBlock Text="Current Frame: " FontSize="14" VerticalAlignment="Center"/>
+            <TextBox x:Name="CurrentFrameTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" FontSize="14" Text="{Binding ElementName=ProgressBar, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+
+        <Slider Grid.Row="1" Margin="10,0,10,0" Height="24" VerticalAlignment="Bottom" Grid.Column="1" ValueChanged="OnProgressChange" Name="ProgressBar" Minimum="1" Maximum="{Binding Value, ElementName=NumFrames, ValidatesOnExceptions=True}" TickFrequency="1" SmallChange="1" IsSnapToTickEnabled="True"/>
 
         <GroupBox Header="Animation" Margin="10,76,10,0" Height="163" VerticalAlignment="Top">
             <Grid Margin="5" RenderTransformOrigin="0.589,0.482">
