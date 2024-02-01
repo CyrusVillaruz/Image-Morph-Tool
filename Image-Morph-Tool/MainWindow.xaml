@@ -41,21 +41,49 @@
         <Button Name="LoadStartImageButton" Content="Select Source Image" Margin="10,10,10,0" 
                 VerticalAlignment="Top" Height="28" Click="LoadSourceImage_Click" 
                 Background="#333333" Foreground="White" BorderThickness="0">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="LightBlue" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#666666" TargetName="Border" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
-            </Button.Resources>
+            </Button.Style>
         </Button>
 
         <Button Name="LoadEndImageButton" Content="Select Destination Image" Margin="10,43,10,0" 
                 VerticalAlignment="Top" Height="28" Click="LoadDestinationImage_Click" 
                 Background="#333333" Foreground="White" BorderThickness="0">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="LightBlue" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#666666" TargetName="Border" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
-            </Button.Resources>
+            </Button.Style>
         </Button>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
@@ -93,11 +121,25 @@
                         Click="PlayButton_Click" Margin="10,106,10,0" Height="20" 
                         Grid.ColumnSpan="2" Background="#333333" Foreground="White"
                         BorderThickness="0">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="5"/>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="LightBlue" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#666666" TargetName="Border" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
-                    </Button.Resources>
+                    </Button.Style>
                 </Button>
                 <CheckBox Name="Reverse" 
                           Content="Reverse" 
@@ -236,13 +278,27 @@
                         Background="#333333" Foreground="White"
                         BorderThickness="0">
                     <Button.Content>
-                        <TextBlock Text="Retrieve Morph Benchmark Results" TextWrapping="Wrap"/>
+                        <TextBlock TextAlignment="Center" Text="Retrieve Morph Benchmark Results" TextWrapping="Wrap" Width="169" Height="31"/>
                     </Button.Content>
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="5"/>
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Background" Value="LightBlue" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#666666" TargetName="Border" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
-                    </Button.Resources>
+                    </Button.Style>
                 </Button>
                 <ComboBox x:Name="NumThreadsSelector"
                           VerticalAlignment="Top"
