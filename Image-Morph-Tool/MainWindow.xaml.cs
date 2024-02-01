@@ -226,5 +226,10 @@ namespace Image_Morph_Tool
             var pos = e.GetPosition(sender as IInputElement);
             return new Vector((float)(pos.X / ((Image)sender).ActualWidth), (float)(pos.Y / ((Image)sender).ActualHeight));
         }
+
+        private void BenchmarkButton_Click(object sender, RoutedEventArgs e)
+        {
+            BenchmarkTextBox.Text = "This feature is not implemented yet";
+        }
     }
 }

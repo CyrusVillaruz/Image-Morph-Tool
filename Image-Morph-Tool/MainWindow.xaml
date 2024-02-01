@@ -90,7 +90,7 @@
             <TextBlock Text="Current Frame: " FontSize="14" VerticalAlignment="Center" Foreground="White"/>
             <TextBox x:Name="CurrentFrameTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" FontSize="14" 
                      Text="{Binding ElementName=ProgressBar, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                     Background="#2C2C2C" Foreground="White"
+                     Background="#333333" Foreground="White"
                      BorderThickness="0" TextAlignment="Center"/>
         </StackPanel>
 
@@ -262,7 +262,10 @@
                     <ColumnDefinition Width="8*"/>
                     <ColumnDefinition Width="93*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="No Benchmark in Progress..." 
+                <TextBox Name="BenchmarkTextBox"
+                         Text="No Benchmark in Progress..."
+                         TextWrapping="Wrap"
+                         TextAlignment="Center"
                          Margin="4,85,10,10" 
                          Grid.ColumnSpan="2" 
                          Grid.Column="1" 
@@ -276,7 +279,8 @@
                         Grid.ColumnSpan="2" Grid.Column="1" 
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                         Background="#333333" Foreground="White"
-                        BorderThickness="0">
+                        BorderThickness="0"
+                        Click="BenchmarkButton_Click">
                     <Button.Content>
                         <TextBlock TextAlignment="Center" Text="Retrieve Morph Benchmark Results" TextWrapping="Wrap" Width="169" Height="31"/>
                     </Button.Content>
