@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace Image_Morph_Tool
         private BitmapSource _originalSourceImage;
         private BitmapSource _originalDestinationImage;
 
+        private bool isReverseChecked;
+
         public const int IMG_WIDTH = 300;
         public const int IMG_HEIGHT = 300;
 
@@ -34,6 +37,7 @@ namespace Image_Morph_Tool
         {
             InitializeComponent();
             _animPlayer.Tick += AnimationPlayerTimeElapsed;
+            isReverseChecked = false;
         }
 
         #region UI Event Handlers
@@ -109,19 +113,24 @@ namespace Image_Morph_Tool
             UpdateOutputImageContent();
         }
 
+        private void ReverseCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            isReverseChecked = (bool)((CheckBox)sender).IsChecked;
+        }
+
         private void NumThreadsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            Debug.WriteLine("Number of threads selected: " + NumThreadsSelector.SelectedIndex);
         }
 
-        private void OnClearMarker_Click(object sender, RoutedEventArgs e)
+        private void BenchmarkButton_Click(object sender, RoutedEventArgs e)
         {
-            morph.MarkerSet.ClearMarkers();
-            UpdateMarkerCanvases();
+            BenchmarkTextBox.Text = "This feature is not implemented yet";
         }
 
-        #endregion 
+        #endregion
 
+        #region Image Handling
         private BitmapImage LoadImageFileDialog()
         {
             OpenFileDialog openDialog = new OpenFileDialog();
@@ -227,9 +236,6 @@ namespace Image_Morph_Tool
             return new Vector((float)(pos.X / ((Image)sender).ActualWidth), (float)(pos.Y / ((Image)sender).ActualHeight));
         }
 
-        private void BenchmarkButton_Click(object sender, RoutedEventArgs e)
-        {
-            BenchmarkTextBox.Text = "This feature is not implemented yet";
-        }
+        #endregion
     }
 }

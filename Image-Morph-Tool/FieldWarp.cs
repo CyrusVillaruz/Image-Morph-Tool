@@ -60,7 +60,6 @@ namespace Image_Morph_Tool
             }
             for (int markerIdx = 0; markerIdx < markers.Length; ++markerIdx)
             {
-                //   markers[markerIdx].target_dirLength = markers[markerIdx].target_dir.Length;
                 markers[markerIdx].target_perpendicNorm.Normalize();
                 markers[markerIdx].target_dirNorm.Normalize();
                 markers[markerIdx].dest_perpendicNorm.Normalize();
@@ -68,8 +67,9 @@ namespace Image_Morph_Tool
             }
 
             if (markers.Length == 0)
+            {
                 return;
-
+            }
 
             Parallel.For(0, outputImage.Height, yi =>
             {
@@ -90,15 +90,21 @@ namespace Image_Morph_Tool
                         // calc relative coordinates to line
                         double u = toStart.Dot(markers[markerIdx].target_dirNorm);
                         double v = toStart.Dot(markers[markerIdx].target_perpendicNorm);
-                        // calc weight
                         double weight;
-                        if (u < 0) // bellow
+                        
+                        if (u < 0)
+                        {
                             weight = toStart.LengthSquared;
-                        else if (u > 1) // above
+                        }
+                        else if (u > 1)
+                        {
                             weight = (toStart + markers[markerIdx].target_dirNorm * markers[markerIdx].target_lineLength).LengthSquared;
-                        else // beside
+                        }
+                        else
+                        {
                             weight = v * v;
-                        weight = Math.Exp(-weight / LINE_WEIGHT); //Math.Pow(markers[markerIdx].target_lineLength / (A + weight), B);
+                        }
+                        weight = Math.Exp(-weight / LINE_WEIGHT);
                         weightSum += weight;
 
                         // translation

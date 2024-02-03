@@ -141,13 +141,14 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <CheckBox Name="Reverse" 
+                <CheckBox Name="ReverseCheckBox" 
                           Content="Reverse" 
                           HorizontalAlignment="Left" 
                           VerticalAlignment="Top" 
                           Width="188" Height="20" 
                           Grid.ColumnSpan="2"
                           Margin="10,80,0,0" 
+                          Click="ReverseCheckBox_Checked"
                           Foreground="White">
                     <CheckBox.Style>
                         <Style TargetType="CheckBox">
