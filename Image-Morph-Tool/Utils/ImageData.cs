@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Image_Morph_Tool
+namespace Image_Morph_Tool.Utils
 {
     public unsafe class ImageData : IDisposable
     {
@@ -40,7 +40,7 @@ namespace Image_Morph_Tool
 
         public void Dispose()
         {
-            System.Runtime.InteropServices.Marshal.FreeHGlobal((IntPtr)Data);
+            System.Runtime.InteropServices.Marshal.FreeHGlobal((nint)Data);
             Data = null;
         }
 
@@ -49,8 +49,8 @@ namespace Image_Morph_Tool
             // linear sampling
             double pixCoordX = x * widthSub1;
             double pixCoordY = y * heightSub1;
-            int coordFloorX = (int)(pixCoordX);
-            int coordFloorY = (int)(pixCoordY);
+            int coordFloorX = (int)pixCoordX;
+            int coordFloorY = (int)pixCoordY;
             double fracX = pixCoordX - coordFloorX;
             double fracY = coordFloorY - coordFloorY;
 

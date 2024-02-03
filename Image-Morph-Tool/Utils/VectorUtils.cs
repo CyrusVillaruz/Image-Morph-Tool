@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Image_Morph_Tool
+namespace Image_Morph_Tool.Utils
 {
     public static class VectorUtils
     {
@@ -35,8 +35,8 @@ namespace Image_Morph_Tool
 
         public static Vector ClampToImageArea(this Vector v)
         {
-            return new Vector(v.X < 0 ? 0 : (v.X > 1 ? 1 : v.X),
-                              v.Y < 0 ? 0 : (v.Y > 1 ? 1 : v.Y));
+            return new Vector(v.X < 0 ? 0 : v.X > 1 ? 1 : v.X,
+                              v.Y < 0 ? 0 : v.Y > 1 ? 1 : v.Y);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows;
 
-namespace Image_Morph_Tool
+namespace Image_Morph_Tool.Utils
 {
     public static class FormUtils
     {
