@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
 
-namespace Image_Morph_Tool
+namespace Image_Morph_Tool.Drawing
 {
     public sealed class Arrow : Shape
     {
@@ -28,43 +28,43 @@ namespace Image_Morph_Tool
         [TypeConverter(typeof(LengthConverter))]
         public double X1
         {
-            get { return (double)base.GetValue(X1Property); }
-            set { base.SetValue(X1Property, value); }
+            get { return (double)GetValue(X1Property); }
+            set { SetValue(X1Property, value); }
         }
 
         [TypeConverter(typeof(LengthConverter))]
         public double Y1
         {
-            get { return (double)base.GetValue(Y1Property); }
-            set { base.SetValue(Y1Property, value); }
+            get { return (double)GetValue(Y1Property); }
+            set { SetValue(Y1Property, value); }
         }
 
         [TypeConverter(typeof(LengthConverter))]
         public double X2
         {
-            get { return (double)base.GetValue(X2Property); }
-            set { base.SetValue(X2Property, value); }
+            get { return (double)GetValue(X2Property); }
+            set { SetValue(X2Property, value); }
         }
 
         [TypeConverter(typeof(LengthConverter))]
         public double Y2
         {
-            get { return (double)base.GetValue(Y2Property); }
-            set { base.SetValue(Y2Property, value); }
+            get { return (double)GetValue(Y2Property); }
+            set { SetValue(Y2Property, value); }
         }
 
         [TypeConverter(typeof(LengthConverter))]
         public double HeadWidth
         {
-            get { return (double)base.GetValue(HeadWidthProperty); }
-            set { base.SetValue(HeadWidthProperty, value); }
+            get { return (double)GetValue(HeadWidthProperty); }
+            set { SetValue(HeadWidthProperty, value); }
         }
 
         [TypeConverter(typeof(LengthConverter))]
         public double HeadHeight
         {
-            get { return (double)base.GetValue(HeadHeightProperty); }
-            set { base.SetValue(HeadHeightProperty, value); }
+            get { return (double)GetValue(HeadHeightProperty); }
+            set { SetValue(HeadHeightProperty, value); }
         }
 
         #endregion
@@ -101,8 +101,8 @@ namespace Image_Morph_Tool
             double sint = Math.Sin(theta);
             double cost = Math.Cos(theta);
 
-            Point pt1 = new Point(X1, this.Y1);
-            Point pt2 = new Point(X2, this.Y2);
+            Point pt1 = new Point(X1, Y1);
+            Point pt2 = new Point(X2, Y2);
 
             Point pt3 = new Point(
                 X2 + (HeadWidth * cost - HeadHeight * sint),

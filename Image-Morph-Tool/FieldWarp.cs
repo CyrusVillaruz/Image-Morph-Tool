@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Image_Morph_Tool.Drawing;
 using Image_Morph_Tool.Utils;
 
 namespace Image_Morph_Tool

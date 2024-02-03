@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows;
 using Image_Morph_Tool.Utils;
 
-namespace Image_Morph_Tool
+namespace Image_Morph_Tool.Drawing
 {
     public class LineMarkerSet : MarkerSet
     {
@@ -47,7 +47,7 @@ namespace Image_Morph_Tool
 
         private const float MIN_LINE_LENGTH = 0.05f;
 
-        public override void OnLeftMouseButtonDown(MarkerSet.Location clickLocation, Vector imageCor, Vector imageSizePixel)
+        public override void OnLeftMouseButtonDown(Location clickLocation, Vector imageCor, Vector imageSizePixel)
         {
             if (_hoveredStartPoint >= 0 || _hoveredEndPoint >= 0 || _hoveredMiddlePoint >= 0)
             {
@@ -192,8 +192,8 @@ namespace Image_Morph_Tool
                 LineMarker marker = (LineMarker)_markerList[markerIdx];
 
                 var arrow = new Arrow();
-                arrow.HeadHeight = MarkerSet.MARKER_RENDER_SIZE / 2;
-                arrow.HeadWidth = MarkerSet.MARKER_RENDER_SIZE;
+                arrow.HeadHeight = MARKER_RENDER_SIZE / 2;
+                arrow.HeadWidth = MARKER_RENDER_SIZE;
                 arrow.Stretch = Stretch.None;
 
                 if (markerIdx == _draggedEndPoint || markerIdx == _draggedStartPoint || markerIdx == _draggedMiddlePoint)
