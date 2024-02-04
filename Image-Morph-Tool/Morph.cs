@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,6 +74,11 @@ namespace Image_Morph_Tool
             FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, false);
 
             CrossDissolve.DissolveImages(_warpedSourceImage, _warpedDestinationImage, morphingProgress, outputImage);
+        }
+
+        public void BenchmarkMorph(float morphingProgress, WriteableBitmap outputImage, int numThreads)
+        {
+            Debug.WriteLine("Benchmark Started with " + numThreads);
         }
     }
 }

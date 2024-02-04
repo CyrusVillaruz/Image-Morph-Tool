@@ -267,44 +267,14 @@
                          Text="No Benchmark in Progress..."
                          TextWrapping="Wrap"
                          TextAlignment="Center"
-                         Margin="4,85,10,10" 
-                         Grid.ColumnSpan="2" 
-                         Grid.Column="1" 
+                         Margin="0,98,0,0" 
+                         Grid.Column="2" 
                          IsEnabled="False" 
                          Background="#2C2C2C" 
                          Foreground="White"
                          BorderThickness="0"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
-                <Button Name="Benchmark" Margin="4,37,10,115"
-                        Grid.ColumnSpan="2" Grid.Column="1" 
-                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                        Background="#333333" Foreground="White"
-                        BorderThickness="0"
-                        Click="BenchmarkButton_Click">
-                    <Button.Content>
-                        <TextBlock TextAlignment="Center" Text="Retrieve Morph Benchmark Results" TextWrapping="Wrap" Width="169" Height="31"/>
-                    </Button.Content>
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="LightBlue" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#666666" TargetName="Border" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"/>
                 <ComboBox x:Name="NumThreadsSelector"
                           VerticalAlignment="Top"
                           SelectedIndex="0"
@@ -320,6 +290,53 @@
                     <ComboBoxItem Content="7 Threads"/>
                     <ComboBoxItem Content="8 Threads"/>
                 </ComboBox>
+                <CheckBox Content="Benchmark" 
+                    HorizontalAlignment="Left" 
+                    Margin="4,48,0,0" 
+                    VerticalAlignment="Top" 
+                    Width="188" Height="20" 
+                    Grid.ColumnSpan="2"
+                    Click="Benchmark_Checked"
+                    Foreground="White" Grid.Column="1">
+                    <CheckBox.Style>
+                        <Style TargetType="{x:Type CheckBox}">
+                            <Setter Property="Background" Value="#333333"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" Background="#2C2C2C" IsHitTestVisible="False">
+                                                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0"><InlineUIContainer>
+                                                        <ContentPresenter/>
+                                                    </InlineUIContainer></TextBlock>
+                                            </Border>
+                                            <Border x:Name="CheckBorder" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="2" Cursor="Hand">
+                                                <Path x:Name="CheckMark"
+                                                    Stroke="White"
+                                                    StrokeThickness="2"
+                                                    Data="M0,5 L5,10 L20,0"
+                                                    SnapsToDevicePixels="True"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    Opacity="0"/>
+                                            </Border>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
             </Grid>
         </GroupBox>
     </Grid>

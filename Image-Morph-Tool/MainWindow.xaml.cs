@@ -30,7 +30,11 @@ namespace Image_Morph_Tool
         private BitmapSource _originalSourceImage;
         private BitmapSource _originalDestinationImage;
 
-        public static bool isReverseChecked;
+        private int _selectedNumThreads = 1;
+
+        private bool _isBenchmarking = false;
+
+        public static bool IsReverseChecked { get; set; }
 
         public const int IMG_WIDTH = 300;
         public const int IMG_HEIGHT = 300;
@@ -116,17 +120,18 @@ namespace Image_Morph_Tool
 
         private void ReverseCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            isReverseChecked = (bool)((CheckBox)sender).IsChecked;
+            IsReverseChecked = (bool)((CheckBox)sender).IsChecked;
         }
 
         private void NumThreadsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine("Number of threads selected: " + NumThreadsSelector.SelectedIndex);
+            _selectedNumThreads = NumThreadsSelector.SelectedIndex + 1;
         }
 
-        private void BenchmarkButton_Click(object sender, RoutedEventArgs e)
+        private void Benchmark_Checked(object sender, RoutedEventArgs e)
         {
-            BenchmarkTextBox.Text = "This feature is not implemented yet";
+            _isBenchmarking = !_isBenchmarking;
+            Debug.WriteLine("Benchmarking Enabled: " + _isBenchmarking);
         }
 
         #endregion
@@ -195,11 +200,19 @@ namespace Image_Morph_Tool
                 return;
             }
 
-            float progress = isReverseChecked
+            float progress = IsReverseChecked
                 ? 1.0f - (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum))
                 : (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
 
-            morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
+            if (_isBenchmarking)
+            {
+                morph.BenchmarkMorph(progress, (WriteableBitmap)OutputImage.Source, _selectedNumThreads);
+                _isBenchmarking = false;
+            }
+            else
+            {
+                morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
+            }
         }
 
         private void UpdateMarkerCanvases()
