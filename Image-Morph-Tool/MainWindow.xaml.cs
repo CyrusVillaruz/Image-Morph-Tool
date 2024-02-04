@@ -195,7 +195,10 @@ namespace Image_Morph_Tool
                 return;
             }
 
-            float progress = (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
+            float progress = isReverseChecked
+                ? 1.0f - (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum))
+                : (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
+
             morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
         }
 

@@ -67,35 +67,12 @@ namespace Image_Morph_Tool
 
         public void MorphImages(float morphingProgress, WriteableBitmap outputImage)
         {
-            if (MainWindow.isReverseChecked)
-            {
-                MorphReverse(morphingProgress, outputImage);
-            }
-            else
-            {
-                MorphForward(morphingProgress, outputImage);
-            }
-        }
-
-        private void MorphForward(float morphingProgress, WriteableBitmap outputImage)
-        {
             _markerSet.UpdateInterpolation(morphingProgress);
 
             FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, true);
             FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, false);
 
             CrossDissolve.DissolveImages(_warpedSourceImage, _warpedDestinationImage, morphingProgress, outputImage);
-        }
-
-        private void MorphReverse(float morphingProgress, WriteableBitmap outputImage)
-        {
-            // TODO: update markers so that warp goes from destination to source instead
-            _markerSet.UpdateInterpolation(morphingProgress);
-
-            FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, true);
-            FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, false);
-
-            CrossDissolve.DissolveImages(_warpedDestinationImage, _warpedSourceImage, morphingProgress, outputImage);
         }
     }
 }
