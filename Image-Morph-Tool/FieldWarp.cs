@@ -41,51 +41,7 @@ namespace Image_Morph_Tool
 
             Parallel.For(0, outputImage.Height, yi =>
             {
-                Color* outputDataPixel = outputImage.Data + yi * outputImage.Width;
-                Color* lastOutputDataPixel = outputDataPixel + outputImage.Width;
-                double y = (double)yi / outputImage.Height;
-
-                for (double x = 0; outputDataPixel != lastOutputDataPixel; x += xStep, ++outputDataPixel)
-                {
-                    Vector position = new Vector(x, y);
-                    Vector displacement = new Vector(0, 0);
-                    double weightSum = 0.0f;
-
-                    for (int markerIndex = 0; markerIndex < markers.Length; ++markerIndex)
-                    {
-                        Vector toStart = position - markers[markerIndex].targetStart;
-
-                        // calc relative coordinates to line
-                        double u = toStart.Dot(markers[markerIndex].targetDirNorm);
-                        double v = toStart.Dot(markers[markerIndex].targetPerpNorm);
-                        double weight;
-
-                        if (u < 0)
-                        {
-                            weight = toStart.LengthSquared;
-                        }
-                        else if (u > 1)
-                        {
-                            weight = (toStart + markers[markerIndex].targetDirNorm * markers[markerIndex].targetLineLength).LengthSquared;
-                        }
-                        else
-                        {
-                            weight = v * v;
-                        }
-                        weight = Math.Exp(-weight / LINE_WEIGHT);
-                        weightSum += weight;
-
-                        // translation
-                        Vector srcPoint = markers[markerIndex].destStart + u * markers[markerIndex].destDirNorm + v * markers[markerIndex].destPerpNorm;
-                        displacement += (srcPoint - position) * weight;
-                    }
-
-                    displacement /= weightSum;
-                    position += displacement;
-                    position = position.ClampToImageArea();
-
-                    *outputDataPixel = inputImage.Sample(position.X, position.Y);
-                }
+                ProcessOutputPixel(yi, xStep, (Color*)outputImage.Data, inputImage, markers, outputImage.Width, outputImage.Height);
             });
         }
 
@@ -112,6 +68,55 @@ namespace Image_Morph_Tool
                 warpMarkers[markerIndex].targetDirNorm.Normalize();
                 warpMarkers[markerIndex].destPerpNorm.Normalize();
                 warpMarkers[markerIndex].destDirNorm.Normalize();
+            }
+        }
+
+        private static unsafe void ProcessOutputPixel(int yi, double xStep, Color* outputData, ImageData inputImage, WarpMarker[] markers, int outputImageWidth, double outputImageHeight)
+        {
+            Color* outputDataPixel = outputData + yi * outputImageWidth;
+            Color* lastOutputDataPixel = outputDataPixel + outputImageWidth;
+            double y = (double)yi / outputImageHeight;
+
+            for (double x = 0; outputDataPixel != lastOutputDataPixel; x += xStep, ++outputDataPixel)
+            {
+                Vector position = new Vector(x, y);
+                Vector displacement = new Vector(0, 0);
+                double weightSum = 0.0f;
+
+                for (int markerIndex = 0; markerIndex < markers.Length; ++markerIndex)
+                {
+                    Vector toStart = position - markers[markerIndex].targetStart;
+
+                    // calc relative coordinates to line
+                    double u = toStart.Dot(markers[markerIndex].targetDirNorm);
+                    double v = toStart.Dot(markers[markerIndex].targetPerpNorm);
+                    double weight;
+
+                    if (u < 0)
+                    {
+                        weight = toStart.LengthSquared;
+                    }
+                    else if (u > 1)
+                    {
+                        weight = (toStart + markers[markerIndex].targetDirNorm * markers[markerIndex].targetLineLength).LengthSquared;
+                    }
+                    else
+                    {
+                        weight = v * v;
+                    }
+                    weight = Math.Exp(-weight / LINE_WEIGHT);
+                    weightSum += weight;
+
+                    // translation
+                    Vector srcPoint = markers[markerIndex].destStart + u * markers[markerIndex].destDirNorm + v * markers[markerIndex].destPerpNorm;
+                    displacement += (srcPoint - position) * weight;
+                }
+
+                displacement /= weightSum;
+                position += displacement;
+                position = position.ClampToImageArea();
+
+                *outputDataPixel = inputImage.Sample(position.X, position.Y);
             }
         }
     }

@@ -26,12 +26,18 @@ namespace Image_Morph_Tool
         public void SetSourceImage(BitmapSource inputStartImage)
         {
             if (_sourceImage != null)
+            {
                 _sourceImage.Dispose();
+            }
+
             if (_warpedSourceImage != null)
-                _warpedSourceImage.Dispose();
+            { 
+                _warpedSourceImage.Dispose(); 
+            }
 
             _warpedSourceImage = new ImageData(inputStartImage.PixelWidth, inputStartImage.PixelHeight);
             _sourceImage = new ImageData(inputStartImage.PixelWidth, inputStartImage.PixelHeight);
+
             unsafe
             {
                 inputStartImage.CopyPixels(System.Windows.Int32Rect.Empty, (IntPtr)_sourceImage.Data, _sourceImage.BufferSize, _sourceImage.Stride);
@@ -41,12 +47,18 @@ namespace Image_Morph_Tool
         public void SetDestinationImage(BitmapSource inputEndImage)
         {
             if (_destinationImage != null)
+            {
                 _destinationImage.Dispose();
+            }
+
             if (_warpedDestinationImage != null)
+            {
                 _warpedDestinationImage.Dispose();
+            }
 
             _warpedDestinationImage = new ImageData(inputEndImage.PixelWidth, inputEndImage.PixelHeight);
             _destinationImage = new ImageData(inputEndImage.PixelWidth, inputEndImage.PixelHeight);
+
             unsafe
             {
                 inputEndImage.CopyPixels(System.Windows.Int32Rect.Empty, (IntPtr)_destinationImage.Data, _destinationImage.BufferSize, _destinationImage.Stride);
@@ -55,7 +67,14 @@ namespace Image_Morph_Tool
 
         public void MorphImages(float morphingProgress, WriteableBitmap outputImage)
         {
-            MorphReverse(morphingProgress, outputImage);
+            if (MainWindow.isReverseChecked)
+            {
+                MorphReverse(morphingProgress, outputImage);
+            }
+            else
+            {
+                MorphForward(morphingProgress, outputImage);
+            }
         }
 
         private void MorphForward(float morphingProgress, WriteableBitmap outputImage)
@@ -74,7 +93,7 @@ namespace Image_Morph_Tool
             _markerSet.UpdateInterpolation(morphingProgress);
 
             FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, false);
-            FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, true);
+            //FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, true);
 
             CrossDissolve.DissolveImages(_warpedDestinationImage, _warpedSourceImage, morphingProgress, outputImage);
         }

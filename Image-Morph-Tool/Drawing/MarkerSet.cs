@@ -76,7 +76,9 @@ namespace Image_Morph_Tool.Drawing
         {
             _lastInterpolationFactor = interpolation;
             foreach (var marker in _markerList)
+            {
                 marker.UpdateInterpolatedMarker(interpolation);
+            }
         }
 
         public abstract void UpdateMarkerCanvas(Location location, Canvas imageCanvas, Vector imageOffsetPixel, Vector imageSizePixel);

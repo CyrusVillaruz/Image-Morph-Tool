@@ -30,7 +30,7 @@ namespace Image_Morph_Tool
         private BitmapSource _originalSourceImage;
         private BitmapSource _originalDestinationImage;
 
-        private bool isReverseChecked;
+        public static bool isReverseChecked;
 
         public const int IMG_WIDTH = 300;
         public const int IMG_HEIGHT = 300;
@@ -39,7 +39,6 @@ namespace Image_Morph_Tool
         {
             InitializeComponent();
             _animPlayer.Tick += AnimationPlayerTimeElapsed;
-            isReverseChecked = false;
         }
 
         #region UI Event Handlers
