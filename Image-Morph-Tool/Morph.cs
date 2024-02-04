@@ -92,8 +92,8 @@ namespace Image_Morph_Tool
             // TODO: update markers so that warp goes from destination to source instead
             _markerSet.UpdateInterpolation(morphingProgress);
 
+            FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, true);
             FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, false);
-            //FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, true);
 
             CrossDissolve.DissolveImages(_warpedDestinationImage, _warpedSourceImage, morphingProgress, outputImage);
         }

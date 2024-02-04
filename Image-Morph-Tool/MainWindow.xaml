@@ -110,7 +110,7 @@
                               Maximum="1000"
                               Minimum="2"
                               ParsingNumberStyle="Integer"
-                              DefaultValue="10" Text="10"
+                              DefaultValue="100" Text="100"
                               VerticalAlignment="Top" Grid.Column="1" 
                               ValueChanged="NumberOfFrames_ValueChanged" 
                               Height="20"
