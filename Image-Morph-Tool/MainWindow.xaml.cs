@@ -133,7 +133,7 @@ namespace Image_Morph_Tool
         #endregion
 
         #region Image Handling
-        private BitmapImage LoadImageFileDialog()
+        private BitmapImage? LoadImageFileDialog()
         {
             OpenFileDialog openDialog = new OpenFileDialog();
             openDialog.Title = "Select a picture";
@@ -176,8 +176,8 @@ namespace Image_Morph_Tool
             SourceImage.UpdateLayout();
             DestinationImage.UpdateLayout();
 
-            morph.SetSourceImage(SourceImage.Source as BitmapSource);
-            morph.SetDestinationImage(DestinationImage.Source as BitmapSource);
+            morph.SetSourceImage((BitmapSource)SourceImage.Source);
+            morph.SetDestinationImage((BitmapSource)DestinationImage.Source);
 
             if (!_animPlayer.IsEnabled)
             {
@@ -192,10 +192,12 @@ namespace Image_Morph_Tool
             UpdateMarkerCanvases();
 
             if (OutputImage.Source == null)
+            {
                 return;
+            }
 
             float progress = (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
-            morph.MorphImages(progress, OutputImage.Source as WriteableBitmap);
+            morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
         }
 
         private void UpdateMarkerCanvases()

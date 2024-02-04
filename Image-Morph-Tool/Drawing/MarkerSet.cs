@@ -67,11 +67,6 @@ namespace Image_Morph_Tool.Drawing
             NONE = -1
         }
 
-        public virtual void ClearMarkers()
-        {
-            _markerList.Clear();
-        }
-
         public abstract void OnLeftMouseButtonDown(Location clickLocation, Vector imageCor, Vector imageSizePixel);
         public abstract void OnLeftMouseButtonUp();
         public abstract void OnRightMouseButtonDown(Location clickLocation, Vector imageCor, Vector imageSizePixel);

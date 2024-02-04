@@ -13,7 +13,7 @@ namespace Image_Morph_Tool.Drawing
         {
             public Vector Start;
             public Vector End;
-            public Vector Middle; // New middle point
+            public Vector Middle;
 
             public static Line Lerp(Line a, Line b, float interp)
             {
@@ -35,14 +35,16 @@ namespace Image_Morph_Tool.Drawing
         }
 
         public IEnumerable<LineMarker> Lines
-        { get { return _markerList.Cast<LineMarker>(); } }
+        { 
+            get { return _markerList.Cast<LineMarker>(); } 
+        }
 
         private int _draggedEndPoint = -1;
         private int _draggedStartPoint = -1;
-        private int _draggedMiddlePoint = -1; // New variable for tracking the dragged middle point
+        private int _draggedMiddlePoint = -1;
         private int _hoveredStartPoint = -1;
         private int _hoveredEndPoint = -1;
-        private int _hoveredMiddlePoint = -1; // New variable for tracking the hovered middle point
+        private int _hoveredMiddlePoint = -1;
         private bool _dragBoth = false;
 
         private const float MIN_LINE_LENGTH = 0.05f;
@@ -53,7 +55,7 @@ namespace Image_Morph_Tool.Drawing
             {
                 _draggedEndPoint = _hoveredEndPoint;
                 _draggedStartPoint = _hoveredStartPoint;
-                _draggedMiddlePoint = _hoveredMiddlePoint; // Start dragging the middle point
+                _draggedMiddlePoint = _hoveredMiddlePoint;
                 return;
             }
 
@@ -61,9 +63,9 @@ namespace Image_Morph_Tool.Drawing
             _draggedEndPoint = _markerList.Count;
             LineMarker newLine = new LineMarker()
             {
-                StartMarker = new Line() { Start = imageCor, End = imageCor + new Vector(MIN_LINE_LENGTH, 0.0), Middle = imageCor + new Vector(MIN_LINE_LENGTH / 2, 0.0) }, // Initialize the middle point
+                StartMarker = new Line() { Start = imageCor, End = imageCor + new Vector(MIN_LINE_LENGTH, 0.0), Middle = imageCor + new Vector(MIN_LINE_LENGTH / 2, 0.0) },
                 EndMarker = new Line() { Start = imageCor, End = imageCor + new Vector(MIN_LINE_LENGTH, 0.0), Middle = imageCor + new Vector(MIN_LINE_LENGTH / 2, 0.0) },
-                InterpolatedMarker = new Line() { Start = imageCor, End = imageCor, Middle = imageCor } // Initialize the middle point
+                InterpolatedMarker = new Line() { Start = imageCor, End = imageCor, Middle = imageCor }
             };
             _markerList.Add(newLine);
         }
@@ -72,7 +74,7 @@ namespace Image_Morph_Tool.Drawing
         {
             _draggedStartPoint = -1;
             _draggedEndPoint = -1;
-            _draggedMiddlePoint = -1; // Stop dragging the middle point
+            _draggedMiddlePoint = -1;
             _dragBoth = false;
         }
 
@@ -86,7 +88,7 @@ namespace Image_Morph_Tool.Drawing
             {
                 _markerList.RemoveAt(_draggedEndPoint);
             }
-            else if (_draggedMiddlePoint >= 0) // Remove the middle point if right-clicked
+            else if (_draggedMiddlePoint >= 0)
             {
                 _markerList.RemoveAt(_draggedMiddlePoint);
             }
@@ -109,7 +111,7 @@ namespace Image_Morph_Tool.Drawing
 
             _draggedStartPoint = -1;
             _draggedEndPoint = -1;
-            _draggedMiddlePoint = -1; // Stop dragging the middle point
+            _draggedMiddlePoint = -1;
         }
 
         public override bool OnMouseMove(Location clickLocation, Vector imageCor, Vector imageSizePixel)
@@ -120,7 +122,7 @@ namespace Image_Morph_Tool.Drawing
                 if ((marker.End - imageCor).Length > MIN_LINE_LENGTH)
                 {
                     marker.Start = imageCor;
-                    marker.Middle = imageCor + (marker.End - imageCor) / 2; // Update the middle point when moving the start point
+                    marker.Middle = imageCor + (marker.End - imageCor) / 2;
                 }
                 if (_dragBoth)
                 {
@@ -128,7 +130,7 @@ namespace Image_Morph_Tool.Drawing
                     if ((marker.End - imageCor).Length > MIN_LINE_LENGTH)
                     {
                         marker.Start = imageCor;
-                        marker.Middle = imageCor + (marker.End - imageCor) / 2; // Update the middle point when moving the start point
+                        marker.Middle = imageCor + (marker.End - imageCor) / 2;
                     }
                 }
                 _markerList[_draggedStartPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
@@ -140,7 +142,7 @@ namespace Image_Morph_Tool.Drawing
                 if ((marker.Start - imageCor).Length > MIN_LINE_LENGTH)
                 {
                     marker.End = imageCor;
-                    marker.Middle = imageCor + (marker.Start - imageCor) / 2; // Update the middle point when moving the end point
+                    marker.Middle = imageCor + (marker.Start - imageCor) / 2;
                 }
                 if (_dragBoth)
                 {
@@ -148,19 +150,19 @@ namespace Image_Morph_Tool.Drawing
                     if ((marker.Start - imageCor).Length > MIN_LINE_LENGTH)
                     {
                         marker.End = imageCor;
-                        marker.Middle = imageCor + (marker.Start - imageCor) / 2; // Update the middle point when moving the end point
+                        marker.Middle = imageCor + (marker.Start - imageCor) / 2;
                     }
                 }
                 _markerList[_draggedEndPoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
                 return true;
             }
-            else if (_draggedMiddlePoint >= 0) // Move the entire line when dragging the middle point
+            else if (_draggedMiddlePoint >= 0)
             {
                 var marker = ((LineMarker)_markerList[_draggedMiddlePoint])[clickLocation];
-                var offset = imageCor - marker.Middle; // Calculate the offset from the original middle point
+                var offset = imageCor - marker.Middle;
                 marker.Start += offset;
                 marker.End += offset;
-                marker.Middle = imageCor; // Update the middle point
+                marker.Middle = imageCor;
                 _markerList[_draggedMiddlePoint].UpdateInterpolatedMarker(_lastInterpolationFactor);
                 return true;
             }
@@ -176,7 +178,6 @@ namespace Image_Morph_Tool.Drawing
                     _hoveredStartPoint = -1;
                 }
 
-                // Check for the middle point
                 _hoveredMiddlePoint = PointHitTest(Lines.Select(x => x[clickLocation].Middle), imageCor, imageSizePixel);
 
                 return false;
@@ -187,20 +188,20 @@ namespace Image_Morph_Tool.Drawing
         {
             imageCanvas.Children.Clear();
 
-            for (int markerIdx = 0; markerIdx < _markerList.Count; ++markerIdx)
+            for (int markerIndex = 0; markerIndex < _markerList.Count; ++markerIndex)
             {
-                LineMarker marker = (LineMarker)_markerList[markerIdx];
+                LineMarker marker = (LineMarker)_markerList[markerIndex];
 
                 var arrow = new Arrow();
                 arrow.HeadHeight = MARKER_RENDER_SIZE / 2;
                 arrow.HeadWidth = MARKER_RENDER_SIZE;
                 arrow.Stretch = Stretch.None;
 
-                if (markerIdx == _draggedEndPoint || markerIdx == _draggedStartPoint || markerIdx == _draggedMiddlePoint)
+                if (markerIndex == _draggedEndPoint || markerIndex == _draggedStartPoint || markerIndex == _draggedMiddlePoint)
                 {
                     arrow.Stroke = new SolidColorBrush(Colors.Red);
                 }
-                else if (markerIdx == _hoveredStartPoint || markerIdx == _hoveredEndPoint || markerIdx == _hoveredMiddlePoint)
+                else if (markerIndex == _hoveredStartPoint || markerIndex == _hoveredEndPoint || markerIndex == _hoveredMiddlePoint)
                 {
                     arrow.Stroke = new SolidColorBrush(Colors.DarkRed);
                 }
@@ -222,7 +223,7 @@ namespace Image_Morph_Tool.Drawing
 
             AddPointsToCanvases(Lines.Select(x => x[location].Start), _draggedStartPoint, _hoveredStartPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
             AddPointsToCanvases(Lines.Select(x => x[location].End), _draggedEndPoint, _hoveredEndPoint, imageCanvas, imageOffsetPixel, imageSizePixel);
-            AddPointsToCanvases(Lines.Select(x => x[location].Middle), _draggedMiddlePoint, _hoveredMiddlePoint, imageCanvas, imageOffsetPixel, imageSizePixel); // Add middle point
+            AddPointsToCanvases(Lines.Select(x => x[location].Middle), _draggedMiddlePoint, _hoveredMiddlePoint, imageCanvas, imageOffsetPixel, imageSizePixel);
         }
     }
 }
