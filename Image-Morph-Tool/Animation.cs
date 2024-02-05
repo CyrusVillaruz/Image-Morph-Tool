@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace Image_Morph_Tool
@@ -30,7 +31,18 @@ namespace Image_Morph_Tool
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!_animPlayer.IsEnabled)
+            if (_isBenchmarking)
+            {
+                BenchmarkTextBox.Text = "Benchmarking...";
+
+                float progress = IsReverseChecked
+                    ? 1.0f - (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum))
+                    : (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
+                morph.BenchmarkMorph(progress, (WriteableBitmap)OutputImage.Source, _selectedNumThreads);
+
+                BenchmarkTextBox.Text = "No Benchmark in Progress...";
+            }
+            else if (!_animPlayer.IsEnabled)
             {
                 ProgressBar.IsEnabled = false;
                 PlayAnimationButton.Content = "Stop";

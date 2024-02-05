@@ -204,15 +204,7 @@ namespace Image_Morph_Tool
                 ? 1.0f - (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum))
                 : (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
 
-            if (_isBenchmarking)
-            {
-                morph.BenchmarkMorph(progress, (WriteableBitmap)OutputImage.Source, _selectedNumThreads);
-                _isBenchmarking = false;
-            }
-            else
-            {
-                morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
-            }
+            morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
         }
 
         private void UpdateMarkerCanvases()

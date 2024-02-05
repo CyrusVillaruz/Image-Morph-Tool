@@ -119,5 +119,49 @@ namespace Image_Morph_Tool
                 *outputDataPixel = inputImage.Sample(position.X, position.Y);
             }
         }
+
+        #region Benchmarking Methods
+        public static unsafe void WarpImage(MarkerSet markerSet, ImageData inputImage, ImageData outputImage, bool isStartImage, int numThreads)
+        {
+            LineMarkerSet lineMarkerSet = (LineMarkerSet)markerSet;
+
+            double xStep = 1.0 / outputImage.Width;
+
+            WarpMarker[] markers = CreateWarpMarkers(lineMarkerSet, isStartImage);
+            NormalizeWarpMarkers(markers);
+
+            if (markers.Length == 0)
+            {
+                return;
+            }
+
+            int height = outputImage.Height;
+            int chunkSize = height / numThreads;
+
+            Task[] tasks = new Task[numThreads];
+
+            for (int i = 0; i < numThreads; i++)
+            {
+                int start = i * chunkSize;
+                int end = (i == numThreads - 1) ? height : (i + 1) * chunkSize;
+
+                tasks[i] = Task.Factory.StartNew(() =>
+                {
+                    ProcessOutputPixels(start, end, xStep, (Color*)outputImage.Data, inputImage, markers, outputImage.Width, height);
+                });
+            }
+
+            Task.WaitAll(tasks);
+        }
+
+        private static unsafe void ProcessOutputPixels(int startY, int endY, double xStep, Color* outputData, ImageData inputImage, WarpMarker[] markers, int width, int height)
+        {
+            for (int yi = startY; yi < endY; yi++)
+            {
+                ProcessOutputPixel(yi, xStep, outputData, inputImage, markers, width, height);
+            }
+        }
+
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using Image_Morph_Tool.Drawing;
 using Image_Morph_Tool.Utils;
@@ -23,6 +24,9 @@ namespace Image_Morph_Tool
         private ImageData _destinationImage;
         private ImageData _warpedSourceImage;
         private ImageData _warpedDestinationImage;
+
+        private TimeSpan previousElapsedTime = TimeSpan.Zero;
+        private List<long> previousRuntimes = new List<long>();
 
         public void SetSourceImage(BitmapSource inputStartImage)
         {
@@ -76,9 +80,42 @@ namespace Image_Morph_Tool
             CrossDissolve.DissolveImages(_warpedSourceImage, _warpedDestinationImage, morphingProgress, outputImage);
         }
 
-        public void BenchmarkMorph(float morphingProgress, WriteableBitmap outputImage, int numThreads)
+        public void BenchmarkMorph(float morphingProgress, WriteableBitmap outputImage, int maxThreads)
         {
-            Debug.WriteLine("Benchmark Started with " + numThreads);
+            previousRuntimes.Clear();
+
+            _markerSet.UpdateInterpolation(morphingProgress);
+
+            StringBuilder resultBuilder = new StringBuilder();
+
+            for (int numThreads = 1; numThreads <= maxThreads; numThreads++)
+            {
+                Stopwatch stopwatch = new Stopwatch();
+
+                Debug.WriteLine($"Running Benchmark with {numThreads} Threads");
+
+                stopwatch.Start();
+                FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, true, numThreads);
+                FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, false, numThreads);
+                CrossDissolve.DissolveImages(_warpedSourceImage, _warpedDestinationImage, morphingProgress, outputImage, numThreads);
+                stopwatch.Stop();
+
+                long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+                resultBuilder.AppendLine($"Morphing with {numThreads} threads runtime: {elapsedMilliseconds} milliseconds");
+
+                previousRuntimes.Add(elapsedMilliseconds);
+
+                previousElapsedTime = stopwatch.Elapsed;
+            }
+
+            for (int i = 2; i <= maxThreads; i++)
+            {
+                double speedupFactor = (double)previousRuntimes[i - 2] / previousRuntimes[i - 1];
+                resultBuilder.AppendLine($"Morphing with {i} threads is {speedupFactor:F2} times faster than morphing with {i - 1} threads");
+            }
+
+            MessageBox.Show(resultBuilder.ToString(), "Benchmark Results", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
