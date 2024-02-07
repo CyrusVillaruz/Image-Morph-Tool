@@ -74,13 +74,6 @@ namespace Image_Morph_Tool
             UpdateOutputImageContent();
         }
 
-        private void ShowOutputMarker_Checked(object sender, RoutedEventArgs e)
-        {
-            OutputImageMarkerCanvas.Visibility = (bool)((CheckBox)sender).IsChecked ? Visibility.Visible : Visibility.Hidden;
-            OutputImageMarkerCanvas.UpdateLayout();
-            UpdateMarkerCanvases();
-        }
-
         private void LoadDestinationImage_Click(object sender, RoutedEventArgs e)
         {
             BitmapImage image = LoadImageFileDialog();
