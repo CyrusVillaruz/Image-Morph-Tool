@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace Image_Morph_Tool.Utils
 {
+    /**
+     * Contains extra methods for the System.Windows Vector class
+     */
     public static class VectorUtils
     {
         public static Vector Lerp(this Vector a, Vector b, float interp)

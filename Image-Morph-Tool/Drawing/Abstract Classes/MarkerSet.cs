@@ -7,66 +7,15 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Image_Morph_Tool.Utils;
+using Image_Morph_Tool.Drawing.Abstract_Classes;
+using Image_Morph_Tool.Enums;
 
 namespace Image_Morph_Tool.Drawing
 {
     public abstract class MarkerSet
     {
-        public abstract class IMarker
-        {
-            public abstract void UpdateInterpolatedMarker(float interp);
-        }
-
-        public abstract class Marker<T> : IMarker
-        {
-            public T StartMarker;
-            public T EndMarker;
-            public T InterpolatedMarker;
-
-            public T this[Location element]
-            {
-                get
-                {
-                    switch (element)
-                    {
-                        case Location.START_IMAGE:
-                            return StartMarker;
-                        case Location.END_IMAGE:
-                            return EndMarker;
-                        case Location.OUTPUT_IMAGE:
-                            return InterpolatedMarker;
-                    }
-                    throw new Exception("PointMarker has only 3 Elements!");
-                }
-                set
-                {
-                    switch (element)
-                    {
-                        case Location.START_IMAGE:
-                            StartMarker = value;
-                            break;
-                        case Location.END_IMAGE:
-                            EndMarker = value;
-                            break;
-                        case Location.OUTPUT_IMAGE:
-                            InterpolatedMarker = value;
-                            break;
-                    }
-                }
-            }
-        }
-
         protected List<IMarker> _markerList = new List<IMarker>();
         protected float _lastInterpolationFactor;
-
-        public enum Location
-        {
-            START_IMAGE = 0,
-            END_IMAGE = 1,
-            OUTPUT_IMAGE = 2,
-            NONE = -1
-        }
-
         public abstract void OnLeftMouseButtonDown(Location clickLocation, Vector imageCor, Vector imageSizePixel);
         public abstract void OnLeftMouseButtonUp();
         public abstract void OnRightMouseButtonDown(Location clickLocation, Vector imageCor, Vector imageSizePixel);

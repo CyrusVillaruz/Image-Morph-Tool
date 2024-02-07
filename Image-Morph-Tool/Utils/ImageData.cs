@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Image_Morph_Tool.Drawing;
+using Image_Morph_Tool.Structs;
 
 namespace Image_Morph_Tool.Utils
 {
@@ -47,19 +47,18 @@ namespace Image_Morph_Tool.Utils
 
         public Color Sample(double x, double y)
         {
-            // linear sampling
-            double pixCoordX = x * widthSub1;
-            double pixCoordY = y * heightSub1;
-            int coordFloorX = (int)pixCoordX;
-            int coordFloorY = (int)pixCoordY;
-            double fracX = pixCoordX - coordFloorX;
-            double fracY = coordFloorY - coordFloorY;
+            double xPosPixel = x * widthSub1;
+            double yPosPixel = y * heightSub1;
+            int xPosFloor = (int)xPosPixel;
+            int yPosFloor = (int)yPosPixel;
+            double fracX = xPosPixel - xPosFloor;
+            double fracY = yPosFloor - yPosFloor;
 
-            Color* upperLeft = Data + (coordFloorY * Width + coordFloorX);
+            Color* upperLeft = Data + (yPosFloor * Width + xPosFloor);
             Color* upperRight = upperLeft;
-            Color* lowerLeft = upperLeft + (coordFloorY != heightSub1 ? Width : 0);
+            Color* lowerLeft = upperLeft + (yPosFloor != heightSub1 ? Width : 0);
             Color* lowerRight = lowerLeft;
-            if (coordFloorX != widthSub1)
+            if (xPosFloor != widthSub1)
             {
                 ++upperRight;
                 ++lowerRight;

@@ -6,45 +6,22 @@ using System.Threading.Tasks;
 using System.Windows;
 using Image_Morph_Tool.Drawing;
 using Image_Morph_Tool.Utils;
+using Image_Morph_Tool.Structs;
 
 namespace Image_Morph_Tool
 {
     public class FieldWarp
     {
-        struct WarpMarker
-        {
-            public Vector targetStart;
-            public Vector targetDirNorm;
-            public Vector targetPerpNorm;
-            public double targetLineLength;
-
-            public Vector destStart;
-            public Vector destDirNorm;
-            public Vector destPerpNorm;
-        };
-
         const float LINE_WEIGHT = 0.03f;
 
-        public static unsafe void WarpImage(MarkerSet markerSet, ImageData inputImage, ImageData outputImage, bool isStartImage)
-        {
-            LineMarkerSet lineMarkerSet = (LineMarkerSet)markerSet;
-
-            double xStep = 1.0 / outputImage.Width;
-
-            WarpMarker[] markers = CreateWarpMarkers(lineMarkerSet, isStartImage);
-            NormalizeWarpMarkers(markers);
-
-            if (markers.Length == 0)
-            {
-                return;
-            }
-
-            Parallel.For(0, outputImage.Height, yi =>
-            {
-                ProcessOutputPixel(yi, xStep, (Color*)outputImage.Data, inputImage, markers, outputImage.Width, outputImage.Height);
-            });
-        }
-
+        /**
+         * Generates an array of warp markers by iterating through each line marker in the provided line marker set.
+         * For each line marker, it constructs a corresponding warp marker with the following properties:
+         *
+         * @param lineMarkerSet The set of line markers
+         * @param isStartImage True if the start image is being warped, false if the end image is being warped
+         * @return a list of initialized warp markers
+         */
         private static WarpMarker[] CreateWarpMarkers(LineMarkerSet lineMarkerSet, bool isStartImage)
         {
             return lineMarkerSet.Lines.Select(x => new WarpMarker
@@ -60,6 +37,12 @@ namespace Image_Morph_Tool
             }).ToArray();
         }
 
+        /**
+         * Iterates through each warp marker in the array and normalizes its target and destination directional vectors.
+         * Normalization ensures that the directional vectors have a unit length, preserving their direction while scaling them to a magnitude of 1.
+         * 
+         * @param warpMarkers list of warp markers
+         */
         private static void NormalizeWarpMarkers(WarpMarker[] warpMarkers)
         {
             for (int markerIndex = 0; markerIndex < warpMarkers.Length; ++markerIndex)
@@ -71,6 +54,20 @@ namespace Image_Morph_Tool
             }
         }
 
+
+        /**
+         * Iterates through each output pixel along the y-axis, calculating its corresponding position in the input image
+         * based on the warp markers and copmutes displacement of the pixel based on the warp markers and their influence,
+         * then samples the input image at the computed position to determine the color of the output pixel.
+         * 
+         * @param yi The y-index of the pixel to process.
+         * @param xStep The step size in the x-direction.
+         * @param outputData A pointer to the output image data.
+         * @param inputImage The input image data.
+         * @param markers An array of warp markers.
+         * @param outputImageWidth The width of the output image.
+         * @param outputImageHeight The height of the output image.
+         */
         private static unsafe void ProcessOutputPixel(int yi, double xStep, Color* outputData, ImageData inputImage, WarpMarker[] markers, int outputImageWidth, double outputImageHeight)
         {
             Color* outputDataPixel = outputData + yi * outputImageWidth;
@@ -87,7 +84,6 @@ namespace Image_Morph_Tool
                 {
                     Vector toStart = position - markers[markerIndex].targetStart;
 
-                    // calc relative coordinates to line
                     double u = toStart.Dot(markers[markerIndex].targetDirNorm);
                     double v = toStart.Dot(markers[markerIndex].targetPerpNorm);
                     double weight;
@@ -107,7 +103,6 @@ namespace Image_Morph_Tool
                     weight = Math.Exp(-weight / LINE_WEIGHT);
                     weightSum += weight;
 
-                    // translation
                     Vector srcPoint = markers[markerIndex].destStart + u * markers[markerIndex].destDirNorm + v * markers[markerIndex].destPerpNorm;
                     displacement += (srcPoint - position) * weight;
                 }
@@ -120,7 +115,17 @@ namespace Image_Morph_Tool
             }
         }
 
-        #region Benchmarking Methods
+        /**
+         * Warps the input image to the output image using the provided marker set, iterating through each pixel in the output image by
+         * calculating its corresponding position in the input image based on the warp markers. It then samples the input image at the computed position
+         * to determine the color of the output pixel.
+         * 
+         * @param markerSet The marker set containing warp markers.
+         * @param inputImage The input image data.
+         * @param outputImage The output image data.
+         * @param isStartImage A boolean indicating whether the input image is the start image.
+         * @param numThreads The number of threads to use for parallel processing.
+         */
         public static unsafe void WarpImage(MarkerSet markerSet, ImageData inputImage, ImageData outputImage, bool isStartImage, int numThreads)
         {
             LineMarkerSet lineMarkerSet = (LineMarkerSet)markerSet;
@@ -154,6 +159,19 @@ namespace Image_Morph_Tool
             Task.WaitAll(tasks);
         }
 
+        /**
+         * Processes output pixels in a specified range, warping each pixel based on the provided marker set and input image.
+         * Each pixel is calculated via the ProcessOutputPixel function.
+         * 
+         * @param startY The starting y-index of the range of pixels to process.
+         * @param endY The ending y-index (exclusive) of the range of pixels to process.
+         * @param xStep The step size in the x-direction.
+         * @param outputData A pointer to the output image data.
+         * @param inputImage The input image data.
+         * @param markers An array of warp markers.
+         * @param width The width of the output image.
+         * @param height The height of the output image.
+         */
         private static unsafe void ProcessOutputPixels(int startY, int endY, double xStep, Color* outputData, ImageData inputImage, WarpMarker[] markers, int width, int height)
         {
             for (int yi = startY; yi < endY; yi++)
@@ -161,7 +179,5 @@ namespace Image_Morph_Tool
                 ProcessOutputPixel(yi, xStep, outputData, inputImage, markers, width, height);
             }
         }
-
-        #endregion
     }
 }

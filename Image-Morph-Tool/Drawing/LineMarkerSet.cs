@@ -4,36 +4,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using Image_Morph_Tool.Utils;
+using Image_Morph_Tool.Drawing.Abstract_Classes;
+using Image_Morph_Tool.Enums;
+using System.Windows.Shapes;
 
 namespace Image_Morph_Tool.Drawing
 {
     public class LineMarkerSet : MarkerSet
     {
-        public class Line
-        {
-            public Vector Start;
-            public Vector End;
-            public Vector Middle;
-
-            public static Line Lerp(Line a, Line b, float interp)
-            {
-                return new Line()
-                {
-                    Start = a.Start.Lerp(b.Start, interp),
-                    End = a.End.Lerp(b.End, interp),
-                    Middle = a.Middle.Lerp(b.Middle, interp)
-                };
-            }
-        }
-
-        public class LineMarker : Marker<Line>
-        {
-            public override void UpdateInterpolatedMarker(float interp)
-            {
-                InterpolatedMarker = Line.Lerp(StartMarker, EndMarker, interp);
-            }
-        }
-
         public IEnumerable<LineMarker> Lines
         { 
             get { return _markerList.Cast<LineMarker>(); } 
@@ -63,21 +41,21 @@ namespace Image_Morph_Tool.Drawing
             _draggedEndPoint = _markerList.Count;
             LineMarker newLine = new LineMarker()
             {
-                StartMarker = new Line() 
+                StartMarker = new CustomLine() 
                 { 
                     Start = clickPos, 
                     End = clickPos + new Vector(MIN_LINE_LENGTH, 0.0),
                     Middle = clickPos + new Vector(MIN_LINE_LENGTH / 2, 0.0) 
                 },
 
-                EndMarker = new Line() 
+                EndMarker = new CustomLine() 
                 { 
                     Start = clickPos, 
                     End = clickPos + new Vector(MIN_LINE_LENGTH, 0.0), 
                     Middle = clickPos + new Vector(MIN_LINE_LENGTH / 2, 0.0) 
                 },
 
-                InterpolatedMarker = new Line() 
+                InterpolatedMarker = new CustomLine() 
                 { 
                     Start = clickPos, 
                     End = clickPos, 
@@ -209,33 +187,30 @@ namespace Image_Morph_Tool.Drawing
             {
                 LineMarker marker = (LineMarker)_markerList[markerIndex];
 
-                var arrow = new Arrow();
-                arrow.HeadHeight = MARKER_RENDER_SIZE / 2;
-                arrow.HeadWidth = MARKER_RENDER_SIZE;
-                arrow.Stretch = Stretch.None;
+                Line line = new Line();
+                line.StrokeThickness = 2;
 
                 if (markerIndex == _draggedEndPoint || markerIndex == _draggedStartPoint || markerIndex == _draggedMiddlePoint)
                 {
-                    arrow.Stroke = new SolidColorBrush(Colors.Red);
+                    line.Stroke = new SolidColorBrush(Colors.Red);
                 }
                 else if (markerIndex == _hoveredStartPoint || markerIndex == _hoveredEndPoint || markerIndex == _hoveredMiddlePoint)
                 {
-                    arrow.Stroke = new SolidColorBrush(Colors.DarkRed);
+                    line.Stroke = new SolidColorBrush(Colors.DarkRed);
                 }
                 else
                 {
-                    arrow.Stroke = new SolidColorBrush(Colors.Black);
+                    line.Stroke = new SolidColorBrush(Colors.Black);
                 }
 
-                arrow.StrokeThickness = 2;
-                arrow.X1 = marker[location].Start.X * imageSizePixel.X;
-                arrow.X2 = marker[location].End.X * imageSizePixel.X;
-                arrow.Y1 = marker[location].Start.Y * imageSizePixel.Y;
-                arrow.Y2 = marker[location].End.Y * imageSizePixel.Y;
+                line.X1 = marker[location].Start.X * imageSizePixel.X;
+                line.Y1 = marker[location].Start.Y * imageSizePixel.Y;
+                line.X2 = marker[location].End.X * imageSizePixel.X;
+                line.Y2 = marker[location].End.Y * imageSizePixel.Y;
 
-                Canvas.SetLeft(arrow, imageOffsetPixel.X);
-                Canvas.SetTop(arrow, imageOffsetPixel.Y);
-                imageCanvas.Children.Add(arrow);
+                Canvas.SetLeft(line, imageOffsetPixel.X);
+                Canvas.SetTop(line, imageOffsetPixel.Y);
+                imageCanvas.Children.Add(line);
             }
 
             AddPointsToCanvases(Lines.Select(x => x[location].Start), _draggedStartPoint, _hoveredStartPoint, imageCanvas, imageOffsetPixel, imageSizePixel);

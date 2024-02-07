@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Image_Morph_Tool.Drawing
+namespace Image_Morph_Tool.Structs
 {
     public struct Color
     {

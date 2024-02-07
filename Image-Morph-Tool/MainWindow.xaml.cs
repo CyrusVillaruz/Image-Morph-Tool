@@ -1,22 +1,13 @@
-﻿using Image_Morph_Tool.Drawing;
-using Image_Morph_Tool.Utils;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Image_Morph_Tool.Utils;
+using Image_Morph_Tool.Enums;
 
 namespace Image_Morph_Tool
 {
@@ -54,7 +45,7 @@ namespace Image_Morph_Tool
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MarkerSet.Location location = sender == SourceImage ? MarkerSet.Location.START_IMAGE : MarkerSet.Location.END_IMAGE;
+            Location location = sender == SourceImage ? Location.START_IMAGE : Location.END_IMAGE;
             morph.MarkerSet.OnLeftMouseButtonDown(location, ComputeRelativeImagePositionFromMouseEvent(sender, e),
                                                         new Vector(((Image)sender).ActualWidth, ((Image)sender).ActualHeight));
             UpdateOutputImageContent();
@@ -62,7 +53,7 @@ namespace Image_Morph_Tool
 
         private void Image_MouseMove(object sender, MouseEventArgs e)
         {
-            MarkerSet.Location location = sender == SourceImage ? MarkerSet.Location.START_IMAGE : MarkerSet.Location.END_IMAGE;
+            Location location = sender == SourceImage ? Location.START_IMAGE : Location.END_IMAGE;
             bool changedMarker = morph.MarkerSet.OnMouseMove(location, ComputeRelativeImagePositionFromMouseEvent(sender, e),
                                                         new Vector(((Image)sender).ActualWidth, ((Image)sender).ActualHeight));
             if (!_animPlayer.IsEnabled && changedMarker)
@@ -77,7 +68,7 @@ namespace Image_Morph_Tool
 
         private void Image_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MarkerSet.Location location = sender == SourceImage ? MarkerSet.Location.START_IMAGE : MarkerSet.Location.END_IMAGE;
+            Location location = sender == SourceImage ? Location.START_IMAGE : Location.END_IMAGE;
             morph.MarkerSet.OnRightMouseButtonDown(location, ComputeRelativeImagePositionFromMouseEvent(sender, e),
                                                         new Vector(((Image)sender).ActualWidth, ((Image)sender).ActualHeight));
             UpdateOutputImageContent();
@@ -204,36 +195,36 @@ namespace Image_Morph_Tool
                 ? 1.0f - (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum))
                 : (float)((ProgressBar.Value - ProgressBar.Minimum) / (ProgressBar.Maximum - ProgressBar.Minimum));
 
-            morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source);
+            morph.MorphImages(progress, (WriteableBitmap)OutputImage.Source, _selectedNumThreads);
         }
 
         private void UpdateMarkerCanvases()
         {
             if (morph.MarkerSet != null)
             {
-                UpdateMarkerCanvases(MarkerSet.Location.START_IMAGE);
-                UpdateMarkerCanvases(MarkerSet.Location.END_IMAGE);
-                UpdateMarkerCanvases(MarkerSet.Location.OUTPUT_IMAGE);
+                UpdateMarkerCanvases(Location.START_IMAGE);
+                UpdateMarkerCanvases(Location.END_IMAGE);
+                UpdateMarkerCanvases(Location.OUTPUT_IMAGE);
             }
         }
 
-        private void UpdateMarkerCanvases(MarkerSet.Location location)
+        private void UpdateMarkerCanvases(Location location)
         {
             if (morph.MarkerSet != null)
             {
                 switch (location)
                 {
-                    case MarkerSet.Location.END_IMAGE:
-                    case MarkerSet.Location.START_IMAGE:
-                        morph.MarkerSet.UpdateMarkerCanvas(MarkerSet.Location.START_IMAGE, StartImageMarkerCanvas,
+                    case Location.END_IMAGE:
+                    case Location.START_IMAGE:
+                        morph.MarkerSet.UpdateMarkerCanvas(Location.START_IMAGE, StartImageMarkerCanvas,
                                                                     new Vector((StartImageMarkerCanvas.ActualWidth - SourceImage.ActualWidth) / 2, (StartImageMarkerCanvas.ActualHeight - SourceImage.ActualHeight) / 2),
                                                                     new Vector(SourceImage.ActualWidth, SourceImage.ActualHeight));
-                        morph.MarkerSet.UpdateMarkerCanvas(MarkerSet.Location.END_IMAGE, EndImageMarkerCanvas,
+                        morph.MarkerSet.UpdateMarkerCanvas(Location.END_IMAGE, EndImageMarkerCanvas,
                         new Vector((EndImageMarkerCanvas.ActualWidth - DestinationImage.ActualWidth) / 2, (EndImageMarkerCanvas.ActualHeight - DestinationImage.ActualHeight) / 2),
                                                                     new Vector(DestinationImage.ActualWidth, DestinationImage.ActualHeight));
                         break;
-                    case MarkerSet.Location.OUTPUT_IMAGE:
-                        morph.MarkerSet.UpdateMarkerCanvas(MarkerSet.Location.OUTPUT_IMAGE, OutputImageMarkerCanvas,
+                    case Location.OUTPUT_IMAGE:
+                        morph.MarkerSet.UpdateMarkerCanvas(Location.OUTPUT_IMAGE, OutputImageMarkerCanvas,
                                                                     new Vector((OutputImageMarkerCanvas.ActualWidth - OutputImage.ActualWidth) / 2, (OutputImageMarkerCanvas.ActualHeight - OutputImage.ActualHeight) / 2),
                                                                     new Vector(OutputImage.ActualWidth, OutputImage.ActualHeight));
                         break;

@@ -5,6 +5,9 @@ using System.Windows.Threading;
 
 namespace Image_Morph_Tool
 {
+    /**
+     * Part of the MainWindow, separated purely for handling the morphing animation and benchmarking.
+     */
     public partial class MainWindow
     {
         private DispatcherTimer _animPlayer = new DispatcherTimer();

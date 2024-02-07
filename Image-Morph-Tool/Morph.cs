@@ -25,7 +25,6 @@ namespace Image_Morph_Tool
         private ImageData _warpedSourceImage;
         private ImageData _warpedDestinationImage;
 
-        private TimeSpan previousElapsedTime = TimeSpan.Zero;
         private List<long> previousRuntimes = new List<long>();
 
         public void SetSourceImage(BitmapSource inputStartImage)
@@ -45,7 +44,7 @@ namespace Image_Morph_Tool
 
             unsafe
             {
-                inputStartImage.CopyPixels(System.Windows.Int32Rect.Empty, (IntPtr)_sourceImage.Data, _sourceImage.BufferSize, _sourceImage.Stride);
+                inputStartImage.CopyPixels(Int32Rect.Empty, (IntPtr)_sourceImage.Data, _sourceImage.BufferSize, _sourceImage.Stride);
             }
         }
 
@@ -66,18 +65,18 @@ namespace Image_Morph_Tool
 
             unsafe
             {
-                inputEndImage.CopyPixels(System.Windows.Int32Rect.Empty, (IntPtr)_destinationImage.Data, _destinationImage.BufferSize, _destinationImage.Stride);
+                inputEndImage.CopyPixels(Int32Rect.Empty, (IntPtr)_destinationImage.Data, _destinationImage.BufferSize, _destinationImage.Stride);
             }
         }
 
-        public void MorphImages(float morphingProgress, WriteableBitmap outputImage)
+        public void MorphImages(float morphingProgress, WriteableBitmap outputImage, int numThreads)
         {
             _markerSet.UpdateInterpolation(morphingProgress);
 
-            FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, true);
-            FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, false);
+            FieldWarp.WarpImage(_markerSet, _sourceImage, _warpedSourceImage, true, numThreads);
+            FieldWarp.WarpImage(_markerSet, _destinationImage, _warpedDestinationImage, false, numThreads);
 
-            CrossDissolve.DissolveImages(_warpedSourceImage, _warpedDestinationImage, morphingProgress, outputImage);
+            CrossDissolve.DissolveImages(_warpedSourceImage, _warpedDestinationImage, morphingProgress, outputImage, numThreads);
         }
 
         public void BenchmarkMorph(float morphingProgress, WriteableBitmap outputImage, int maxThreads)
@@ -105,8 +104,6 @@ namespace Image_Morph_Tool
                 resultBuilder.AppendLine($"Morphing with {numThreads} threads runtime: {elapsedMilliseconds} milliseconds");
 
                 previousRuntimes.Add(elapsedMilliseconds);
-
-                previousElapsedTime = stopwatch.Elapsed;
             }
 
             for (int i = 2; i <= maxThreads; i++)
