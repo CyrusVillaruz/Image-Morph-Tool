@@ -204,7 +204,7 @@
 
             </Grid>
         </GroupBox>
-        <GroupBox Header="Benchmarking" 
+        <GroupBox Header="Benchmarking / Thread Selection" 
                   Margin="10,244,10,0" 
                   Height="218" 
                   VerticalAlignment="Top" 
