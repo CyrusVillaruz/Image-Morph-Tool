@@ -118,7 +118,7 @@
                               BorderThickness="0"/>
                 <Label Content="Number of Frames&#xD;&#xA;" VerticalAlignment="Top" Height="26" Margin="5,1,0,0" Foreground="White"/>
                 <Button x:Name="PlayAnimationButton" Content="Play" VerticalAlignment="Top" 
-                        Click="PlayButton_Click" Margin="10,106,10,0" Height="20" 
+                        Click="PlayButton_Click" Margin="10,100,10,0" Height="20" 
                         Grid.ColumnSpan="2" Background="#333333" Foreground="White"
                         BorderThickness="0">
                     <Button.Style>
@@ -144,10 +144,10 @@
                 <CheckBox Name="ReverseCheckBox" 
                           Content="Reverse" 
                           HorizontalAlignment="Left" 
-                          VerticalAlignment="Top" 
+                          VerticalAlignment="Center" 
                           Width="188" Height="20" 
                           Grid.ColumnSpan="2"
-                          Margin="10,80,0,0" 
+                          Margin="10,0,0,0" 
                           Click="ReverseCheckBox_Checked"
                           Foreground="White">
                     <CheckBox.Style>
@@ -201,53 +201,6 @@
                             Background="#333333" Foreground="White"
                             BorderThickness="0"/>
                 <Label Content="Morph Duration (s):" VerticalAlignment="Top" Margin="5,25,0,0" Height="26" Foreground="White"/>
-                <CheckBox Content="Show Control Line" 
-                          HorizontalAlignment="Left" 
-                          Margin="10,0,0,0" 
-                          VerticalAlignment="Center" 
-                          Width="188" Height="20" 
-                          Grid.ColumnSpan="2"
-                          Click="ShowOutputMarker_Checked"
-                          Foreground="White">
-                    <CheckBox.Style>
-                        <Style TargetType="CheckBox">
-                            <Setter Property="Background" Value="#333333"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="CheckBox">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Border Grid.Column="0" Background="#2C2C2C" IsHitTestVisible="False">
-                                                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0">
-                                    <ContentPresenter/>
-                                                </TextBlock>
-                                            </Border>
-                                            <Border x:Name="CheckBorder" Grid.Column="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="2" Cursor="Hand">
-                                                <Path x:Name="CheckMark"
-                                                      Stroke="White"
-                                                      StrokeThickness="2"
-                                                      Data="M0,5 L5,10 L20,0"
-                                                      SnapsToDevicePixels="True"
-                                                      HorizontalAlignment="Right"
-                                                      VerticalAlignment="Center"
-                                                      Opacity="0"/>
-                                            </Border>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </CheckBox.Style>
-                </CheckBox>
 
             </Grid>
         </GroupBox>
